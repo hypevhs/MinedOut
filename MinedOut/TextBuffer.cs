@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using System.IO;
+using SFML.Graphics;
 using SFML.System;
 
 namespace MinedOut
@@ -19,38 +20,6 @@ namespace MinedOut
 
     class TextBuffer : Drawable
     {
-        const string TextBufferVert = @"
-#version 110
-
-void main() {
-	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
-	gl_TexCoord[0] = gl_TextureMatrix[0] * gl_MultiTexCoord0;
-	gl_FrontColor = gl_Color;
-}
-";
-
-        const string TextBufferFrag = @"
-#version 120
-
-uniform sampler2D font;
-uniform sampler2D foredata;
-uniform sampler2D backdata;
-uniform vec2 buffersize;
-uniform vec4 fontsizes;
-
-void main() {
-	vec4 Fore = texture2D(foredata, gl_TexCoord[0].xy);
-	vec4 Back = texture2D(backdata, gl_TexCoord[0].xy);
-	float chr = 255.0f * Fore.a;
-	
-	vec2 fontpos = vec2(floor(mod(chr, fontsizes.z)) * fontsizes.x, floor(chr / fontsizes.w) * fontsizes.y);
-	vec2 offset = vec2(mod(floor(gl_TexCoord[0].x * (buffersize.x * fontsizes.x)), fontsizes.x),
-					   mod(floor(gl_TexCoord[0].y * (buffersize.y * fontsizes.y)) + 0.5f, fontsizes.y));
-
-	vec4 fontclr = texture2D(font, (fontpos + offset) / vec2(fontsizes.x * fontsizes.z, fontsizes.y * fontsizes.w));
-	gl_FragColor = mix(Back, vec4(Fore.rgb, 1.0f), fontclr.r);
-}
-";
         static Shader TextBufferShader = null;
 
         public int BufferWidth
@@ -118,7 +87,11 @@ void main() {
             RT.Texture.Smooth = true;
             Sprite = new Sprite(RT.Texture);
             if (TextBufferShader == null)
-                TextBufferShader = Shader.FromString(TextBufferVert, TextBufferFrag);
+            {
+                var vertText = File.ReadAllText("content/textbuffer.vert");
+                var fragText = File.ReadAllText("content/textbuffer.frag");
+                TextBufferShader = Shader.FromString(vertText, fragText);
+            }
             TextStates = new RenderStates(TextBufferShader);
 
             ScreenQuad = new Vertex[] {
