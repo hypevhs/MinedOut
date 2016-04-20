@@ -1,48 +1,19 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 
-namespace Graphics
+namespace MinedOut
 {
-    struct TextBufferEntry
+    internal struct TextBufferEntry
     {
-        public char Char;
-        public Color Fore, Back;
+        public char WrittenChar { get; }
+        public Color Fore { get; }
+        public Color Back { get; }
 
-        public TextBufferEntry(char Char, Color Fore, Color Back)
+        public TextBufferEntry(char writtenChar, Color fore, Color back)
         {
-            this.Char = Char;
-            this.Fore = Fore;
-            this.Back = Back;
-        }
-
-        public TextBufferEntry(char Char)
-            : this(Char, new Color(192, 192, 192), Color.Black)
-        {
-        }
-
-        public TextBufferEntry(Color Fore, Color Back)
-            : this((char)0, Fore, Back)
-        {
-        }
-
-        public TextBufferEntry(Color Colors)
-            : this(Colors, Colors)
-        {
-        }
-
-        public static implicit operator char(TextBufferEntry E)
-        {
-            return E.Char;
-        }
-
-        public static implicit operator TextBufferEntry(char C)
-        {
-            return new TextBufferEntry(C);
-        }
-
-        public static implicit operator TextBufferEntry(byte B)
-        {
-            return (char)B;
+            WrittenChar = writtenChar;
+            Fore = fore;
+            Back = back;
         }
     }
 
@@ -68,16 +39,16 @@ uniform vec2 buffersize;
 uniform vec4 fontsizes;
 
 void main() {
-	vec4 fore = texture2D(foredata, gl_TexCoord[0].xy);
-	vec4 back = texture2D(backdata, gl_TexCoord[0].xy);
-	float chr = 255.0f * fore.a;
+	vec4 Fore = texture2D(foredata, gl_TexCoord[0].xy);
+	vec4 Back = texture2D(backdata, gl_TexCoord[0].xy);
+	float chr = 255.0f * Fore.a;
 	
 	vec2 fontpos = vec2(floor(mod(chr, fontsizes.z)) * fontsizes.x, floor(chr / fontsizes.w) * fontsizes.y);
 	vec2 offset = vec2(mod(floor(gl_TexCoord[0].x * (buffersize.x * fontsizes.x)), fontsizes.x),
 					   mod(floor(gl_TexCoord[0].y * (buffersize.y * fontsizes.y)) + 0.5f, fontsizes.y));
 
 	vec4 fontclr = texture2D(font, (fontpos + offset) / vec2(fontsizes.x * fontsizes.z, fontsizes.y * fontsizes.w));
-	gl_FragColor = mix(back, vec4(fore.rgb, 1.0f), fontclr.r);
+	gl_FragColor = mix(Back, vec4(Fore.rgb, 1.0f), fontclr.r);
 }
 ";
         static Shader TextBufferShader = null;
@@ -219,7 +190,7 @@ void main() {
             }
             set
             {
-                Set(Idx, value.Char, value.Fore, value.Back);
+                Set(Idx, value.WrittenChar, value.Fore, value.Back);
             }
         }
 
@@ -231,7 +202,7 @@ void main() {
             }
             set
             {
-                Set(X, Y, value.Char, value.Fore, value.Back);
+                Set(X, Y, value.WrittenChar, value.Fore, value.Back);
             }
         }
 
