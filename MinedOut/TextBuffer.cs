@@ -38,22 +38,22 @@ namespace MinedOut
         private readonly byte[] foreDataRaw;
         private readonly byte[] backDataRaw;
 
-        public TextBuffer(uint W, uint H)
+        public TextBuffer(uint w, uint h)
         {
-            BufferWidth = (int)W;
-            BufferHeight = (int)H;
+            BufferWidth = (int)w;
+            BufferHeight = (int)h;
             dirty = true;
             CharWidth = 8;
             CharHeight = 12;
 
-            foreDataRaw = new byte[W * H * 4];
-            foreData = new Texture(new Image(W, H, foreDataRaw));
+            foreDataRaw = new byte[w * h * 4];
+            foreData = new Texture(new Image(w, h, foreDataRaw));
             foreData.Smooth = false;
-            backDataRaw = new byte[W * H * 4];
-            backData = new Texture(new Image(W, H, backDataRaw));
+            backDataRaw = new byte[w * h * 4];
+            backData = new Texture(new Image(w, h, backDataRaw));
             backData.Smooth = false;
 
-            rt = new RenderTexture(W * (uint)CharWidth, H * (uint)CharHeight);
+            rt = new RenderTexture(w * (uint)CharWidth, h * (uint)CharHeight);
             rt.Texture.Smooth = true;
             Sprite = new Sprite(rt.Texture);
             if (textBufferShader == null)
@@ -64,7 +64,7 @@ namespace MinedOut
             }
             textStates = new RenderStates(textBufferShader);
 
-            screenQuad = new Vertex[] {
+            screenQuad = new[] {
                 new Vertex(new Vector2f(0, 0), Color.White, new Vector2f(0, 0)),
                 new Vertex(new Vector2f(rt.Size.X, 0), Color.White, new Vector2f(1, 0)),
                 new Vertex(new Vector2f(rt.Size.X, rt.Size.Y), Color.White, new Vector2f(1, 1)),
@@ -74,111 +74,111 @@ namespace MinedOut
             Clear();
         }
 
-        public void SetFontTexture(Texture Fnt, int CharW = 8, int CharH = 12)
+        public void SetFontTexture(Texture fnt, int charW = 8, int charH = 12)
         {
-            this.CharWidth = CharW;
-            this.CharHeight = CharH;
-            asciiFont = Fnt;
+            CharWidth = charW;
+            CharHeight = charH;
+            asciiFont = fnt;
             dirty = true;
         }
 
-        public void Set(int X, int Y, char C, Color Fg, Color Bg)
+        public void Set(int x, int y, char c, Color fg, Color bg)
         {
-            Set(Y * BufferWidth + X, C, Fg, Bg);
+            Set(y * BufferWidth + x, c, fg, bg);
         }
 
-        public void Set(int X, int Y, Color Fg, Color Bg)
+        public void Set(int x, int y, Color fg, Color bg)
         {
-            Set(Y * BufferWidth + X, Fg, Bg);
+            Set(y * BufferWidth + x, fg, bg);
         }
 
-        public void Set(int Idx, Color Fg, Color Bg)
+        public void Set(int idx, Color fg, Color bg)
         {
-            Idx *= 4;
-            foreDataRaw[Idx] = Fg.R;
-            foreDataRaw[Idx + 1] = Fg.G;
-            foreDataRaw[Idx + 2] = Fg.B;
-            backDataRaw[Idx] = Bg.R;
-            backDataRaw[Idx + 1] = Bg.G;
-            backDataRaw[Idx + 2] = Bg.B;
-            backDataRaw[Idx + 3] = Bg.A;
+            idx *= 4;
+            foreDataRaw[idx] = fg.R;
+            foreDataRaw[idx + 1] = fg.G;
+            foreDataRaw[idx + 2] = fg.B;
+            backDataRaw[idx] = bg.R;
+            backDataRaw[idx + 1] = bg.G;
+            backDataRaw[idx + 2] = bg.B;
+            backDataRaw[idx + 3] = bg.A;
             dirty = true;
         }
 
-        public void Set(int Idx, char C, Color Fg, Color Bg)
+        public void Set(int idx, char c, Color fg, Color bg)
         {
-            Set(Idx, Fg, Bg);
-            foreDataRaw[Idx * 4 + 3] = (byte)C;
+            Set(idx, fg, bg);
+            foreDataRaw[idx * 4 + 3] = (byte)c;
             dirty = true;
         }
 
-        public TextBufferEntry Get(int X, int Y)
+        public TextBufferEntry Get(int x, int y)
         {
-            return Get(Y * BufferWidth + X);
+            return Get(y * BufferWidth + x);
         }
 
-        public TextBufferEntry Get(int Idx)
+        public TextBufferEntry Get(int idx)
         {
-            Idx *= 4;
-            return new TextBufferEntry((char)foreDataRaw[Idx + 3],
-                new Color(foreDataRaw[Idx], foreDataRaw[Idx + 1], foreDataRaw[Idx + 2]),
-                new Color(backDataRaw[Idx], backDataRaw[Idx + 1], backDataRaw[Idx + 2], backDataRaw[Idx + 3]));
+            idx *= 4;
+            return new TextBufferEntry((char)foreDataRaw[idx + 3],
+                new Color(foreDataRaw[idx], foreDataRaw[idx + 1], foreDataRaw[idx + 2]),
+                new Color(backDataRaw[idx], backDataRaw[idx + 1], backDataRaw[idx + 2], backDataRaw[idx + 3]));
         }
 
-        public TextBufferEntry this[int Idx]
+        public TextBufferEntry this[int idx]
         {
             get
             {
-                return Get(Idx);
+                return Get(idx);
             }
             set
             {
-                Set(Idx, value.WrittenChar, value.Fore, value.Back);
+                Set(idx, value.WrittenChar, value.Fore, value.Back);
             }
         }
 
-        public TextBufferEntry this[int X, int Y]
+        public TextBufferEntry this[int x, int y]
         {
             get
             {
-                return Get(X, Y);
+                return Get(x, y);
             }
             set
             {
-                Set(X, Y, value.WrittenChar, value.Fore, value.Back);
+                Set(x, y, value.WrittenChar, value.Fore, value.Back);
             }
         }
 
-        public void Clear(char C = (char)0)
+        public void Clear(char c = (char)0)
         {
-            Clear(C, Color.White, Color.Black);
+            Clear(c, Color.White, Color.Black);
         }
 
-        public void Clear(char C, Color Fg, Color Bg)
+        public void Clear(char c, Color fg, Color bg)
         {
             for (int i = 0; i < BufferWidth * BufferHeight; i++)
-                Set(i, C, Fg, Bg);
+                Set(i, c, fg, bg);
         }
 
-        public void Print(int X, int Y, string Str)
+        public void Print(int x, int y, string str)
         {
-            Print(Y * BufferWidth + X, Str);
+            Print(y * BufferWidth + x, str);
         }
 
-        public void Print(int X, int Y, string Str, Color Fg, Color Bg)
+        public void Print(int x, int y, string str, Color fg, Color bg)
         {
-            Print(Y * BufferWidth + X, Str, Fg, Bg);
+            Print(y * BufferWidth + x, str, fg, bg);
         }
 
-        public void Print(int I, string Str)
+        public void Print(int I, string str)
         {
-            Print(I, Str, new Color(192, 192, 192), Color.Black);
+            Print(I, str, new Color(192, 192, 192), Color.Black);
         }
 
-        public void Print(int I, string Str, Color Fg, Color Bg)
+        public void Print(int I, string str, Color fg, Color bg)
         {
-            for (int i = 0; i < Str.Length; i++)
-                Set(I + i, Str[i], Fg, Bg);
+            for (int i = 0; i < str.Length; i++)
+                Set(I + i, str[i], fg, bg);
         }
 
         void Update()
@@ -200,10 +200,10 @@ namespace MinedOut
             rt.Display();
         }
 
-        public void Draw(RenderTarget R, RenderStates S)
+        public void Draw(RenderTarget r, RenderStates s)
         {
             Update();
-            Sprite.Draw(R, S);
+            Sprite.Draw(r, s);
         }
     }
 }
