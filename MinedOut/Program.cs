@@ -8,7 +8,7 @@ namespace MinedOut
 {
     internal static class Program
     {
-        static RenderWindow window;
+        private static RenderWindow window;
         private static Minefield minefield;
 
         private static void Main(string[] args)
@@ -46,13 +46,17 @@ namespace MinedOut
         {
             window.DispatchEvents();
             window.Clear();
+            
+            var drawCmds = minefield.Draw();
 
-            var circleShape = new CircleShape
+            foreach (var drawCommand in drawCmds)
             {
-                Radius = 16f,
-                FillColor = Color.Red
-            };
-            window.Draw(circleShape);
+                var x = drawCommand.X;
+                var y = drawCommand.Y;
+                var b = drawCommand.BackgroundColor;
+                var f = drawCommand.ForegroundColor;
+                var c = drawCommand.WrittenChar;
+            }
 
             window.Display();
         }
