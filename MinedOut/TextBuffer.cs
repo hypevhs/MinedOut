@@ -47,11 +47,9 @@ namespace MinedOut
             CharHeight = 12;
 
             foreDataRaw = new byte[w * h * 4];
-            foreData = new Texture(new Image(w, h, foreDataRaw));
-            foreData.Smooth = false;
+            foreData = new Texture(new Image(w, h, foreDataRaw)) {Smooth = false};
             backDataRaw = new byte[w * h * 4];
-            backData = new Texture(new Image(w, h, backDataRaw));
-            backData.Smooth = false;
+            backData = new Texture(new Image(w, h, backDataRaw)) {Smooth = false};
 
             rt = new RenderTexture(w * (uint)CharWidth, h * (uint)CharHeight);
             rt.Texture.Smooth = true;
@@ -177,11 +175,11 @@ namespace MinedOut
 
         public void Print(int I, string str, Color fg, Color bg)
         {
-            for (int i = 0; i < str.Length; i++)
+            for (var i = 0; i < str.Length; i++)
                 Set(I + i, str[i], fg, bg);
         }
 
-        void Update()
+        private void Update()
         {
             if (!dirty)
                 return;
