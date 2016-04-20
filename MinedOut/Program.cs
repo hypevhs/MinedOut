@@ -9,6 +9,7 @@ namespace MinedOut
     internal static class Program
     {
         static RenderWindow window;
+        private static Minefield minefield;
 
         private static void Main(string[] args)
         {
@@ -37,6 +38,8 @@ namespace MinedOut
             window.SetFramerateLimit(60);
             window.Closed += (obj, e) => { window.Close(); };
             window.Size = new Vector2u(800, 600);
+
+            minefield = new Minefield();
         }
 
         private static void UpdateDraw()
