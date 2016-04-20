@@ -8,9 +8,10 @@ namespace MinedOut
 {
     internal static class Program
     {
+        private const int WindowW = 80*8;
+        private const int WindowH = 24*12;
         private static RenderWindow window;
-        private static Minefield minefield;
-        private static TextBuffer buffer;
+        private static GameScene gameScene;
 
         private static void Main(string[] args)
         {
@@ -35,15 +36,12 @@ namespace MinedOut
         private static void LoadContentInitialize()
         {
             window = new RenderWindow(
-                new VideoMode(800, 600), "Mined Out");
+                new VideoMode(WindowW, WindowH), "Mined Out");
             window.SetFramerateLimit(60);
             window.Closed += (obj, e) => { window.Close(); };
-            window.Size = new Vector2u(800, 600);
-
-            minefield = new Minefield();
+            window.Size = new Vector2u(WindowW, WindowH);
             
-            buffer = new TextBuffer(80, 24);
-            buffer.SetFontTexture(new Texture("content/font.png"));
+            gameScene = new GameScene();
         }
 
         private static void UpdateDraw()
@@ -51,20 +49,7 @@ namespace MinedOut
             window.DispatchEvents();
             window.Clear();
             
-            var drawCmds = minefield.Draw();
-
-            foreach (var drawCommand in drawCmds)
-            {
-                var x = drawCommand.X;
-                var y = drawCommand.Y;
-                var b = drawCommand.BackgroundColor;
-                var f = drawCommand.ForegroundColor;
-                var c = drawCommand.WrittenChar;
-
-                buffer.Set(x, y, c, f, b);
-            }
-
-            buffer.Draw(window, RenderStates.Default);
+            window.Draw(gameScene);
 
             window.Display();
         }
