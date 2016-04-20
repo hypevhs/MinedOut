@@ -18,87 +18,57 @@ namespace MinedOut
         }
     }
 
-    class TextBuffer : Drawable
+    internal class TextBuffer : Drawable
     {
-        static Shader TextBufferShader = null;
+        private static Shader textBufferShader;
 
-        public int BufferWidth
-        {
-            get
-            {
-                return W;
-            }
-        }
+        public int BufferWidth { get; }
+        public int BufferHeight { get; }
+        public int CharWidth { get; private set; }
+        public int CharHeight { get; private set; }
+        public Sprite Sprite { get; }
 
-        public int BufferHeight
-        {
-            get
-            {
-                return H;
-            }
-        }
-
-        public int CharWidth
-        {
-            get
-            {
-                return CharW;
-            }
-        }
-
-        public int CharHeight
-        {
-            get
-            {
-                return CharH;
-            }
-        }
-
-        public Sprite Sprite
-        {
-            get;
-            private set;
-        }
-
-        int W, H, CharW, CharH;
-        bool Dirty;
-        RenderTexture RT;
-        Vertex[] ScreenQuad;
-        RenderStates TextStates;
-        Texture ForeData, BackData, ASCIIFont;
-        byte[] ForeDataRaw, BackDataRaw;
+        private bool dirty;
+        private readonly RenderTexture rt;
+        private readonly Vertex[] screenQuad;
+        private RenderStates textStates;
+        private readonly Texture foreData;
+        private readonly Texture backData;
+        private Texture asciiFont;
+        private readonly byte[] foreDataRaw;
+        private readonly byte[] backDataRaw;
 
         public TextBuffer(uint W, uint H)
         {
-            this.W = (int)W;
-            this.H = (int)H;
-            Dirty = true;
-            CharW = 8;
-            CharH = 12;
+            BufferWidth = (int)W;
+            BufferHeight = (int)H;
+            dirty = true;
+            CharWidth = 8;
+            CharHeight = 12;
 
-            ForeDataRaw = new byte[W * H * 4];
-            ForeData = new Texture(new Image(W, H, ForeDataRaw));
-            ForeData.Smooth = false;
-            BackDataRaw = new byte[W * H * 4];
-            BackData = new Texture(new Image(W, H, BackDataRaw));
-            BackData.Smooth = false;
+            foreDataRaw = new byte[W * H * 4];
+            foreData = new Texture(new Image(W, H, foreDataRaw));
+            foreData.Smooth = false;
+            backDataRaw = new byte[W * H * 4];
+            backData = new Texture(new Image(W, H, backDataRaw));
+            backData.Smooth = false;
 
-            RT = new RenderTexture(W * (uint)CharW, H * (uint)CharH);
-            RT.Texture.Smooth = true;
-            Sprite = new Sprite(RT.Texture);
-            if (TextBufferShader == null)
+            rt = new RenderTexture(W * (uint)CharWidth, H * (uint)CharHeight);
+            rt.Texture.Smooth = true;
+            Sprite = new Sprite(rt.Texture);
+            if (textBufferShader == null)
             {
                 var vertText = File.ReadAllText("content/textbuffer.vert");
                 var fragText = File.ReadAllText("content/textbuffer.frag");
-                TextBufferShader = Shader.FromString(vertText, fragText);
+                textBufferShader = Shader.FromString(vertText, fragText);
             }
-            TextStates = new RenderStates(TextBufferShader);
+            textStates = new RenderStates(textBufferShader);
 
-            ScreenQuad = new Vertex[] {
+            screenQuad = new Vertex[] {
                 new Vertex(new Vector2f(0, 0), Color.White, new Vector2f(0, 0)),
-                new Vertex(new Vector2f(RT.Size.X, 0), Color.White, new Vector2f(1, 0)),
-                new Vertex(new Vector2f(RT.Size.X, RT.Size.Y), Color.White, new Vector2f(1, 1)),
-                new Vertex(new Vector2f(0, RT.Size.Y), Color.White, new Vector2f(0, 1)),
+                new Vertex(new Vector2f(rt.Size.X, 0), Color.White, new Vector2f(1, 0)),
+                new Vertex(new Vector2f(rt.Size.X, rt.Size.Y), Color.White, new Vector2f(1, 1)),
+                new Vertex(new Vector2f(0, rt.Size.Y), Color.White, new Vector2f(0, 1)),
             };
 
             Clear();
@@ -106,53 +76,53 @@ namespace MinedOut
 
         public void SetFontTexture(Texture Fnt, int CharW = 8, int CharH = 12)
         {
-            this.CharW = CharW;
-            this.CharH = CharH;
-            ASCIIFont = Fnt;
-            Dirty = true;
+            this.CharWidth = CharW;
+            this.CharHeight = CharH;
+            asciiFont = Fnt;
+            dirty = true;
         }
 
         public void Set(int X, int Y, char C, Color Fg, Color Bg)
         {
-            Set(Y * W + X, C, Fg, Bg);
+            Set(Y * BufferWidth + X, C, Fg, Bg);
         }
 
         public void Set(int X, int Y, Color Fg, Color Bg)
         {
-            Set(Y * W + X, Fg, Bg);
+            Set(Y * BufferWidth + X, Fg, Bg);
         }
 
         public void Set(int Idx, Color Fg, Color Bg)
         {
             Idx *= 4;
-            ForeDataRaw[Idx] = Fg.R;
-            ForeDataRaw[Idx + 1] = Fg.G;
-            ForeDataRaw[Idx + 2] = Fg.B;
-            BackDataRaw[Idx] = Bg.R;
-            BackDataRaw[Idx + 1] = Bg.G;
-            BackDataRaw[Idx + 2] = Bg.B;
-            BackDataRaw[Idx + 3] = Bg.A;
-            Dirty = true;
+            foreDataRaw[Idx] = Fg.R;
+            foreDataRaw[Idx + 1] = Fg.G;
+            foreDataRaw[Idx + 2] = Fg.B;
+            backDataRaw[Idx] = Bg.R;
+            backDataRaw[Idx + 1] = Bg.G;
+            backDataRaw[Idx + 2] = Bg.B;
+            backDataRaw[Idx + 3] = Bg.A;
+            dirty = true;
         }
 
         public void Set(int Idx, char C, Color Fg, Color Bg)
         {
             Set(Idx, Fg, Bg);
-            ForeDataRaw[Idx * 4 + 3] = (byte)C;
-            Dirty = true;
+            foreDataRaw[Idx * 4 + 3] = (byte)C;
+            dirty = true;
         }
 
         public TextBufferEntry Get(int X, int Y)
         {
-            return Get(Y * W + X);
+            return Get(Y * BufferWidth + X);
         }
 
         public TextBufferEntry Get(int Idx)
         {
             Idx *= 4;
-            return new TextBufferEntry((char)ForeDataRaw[Idx + 3],
-                new Color(ForeDataRaw[Idx], ForeDataRaw[Idx + 1], ForeDataRaw[Idx + 2]),
-                new Color(BackDataRaw[Idx], BackDataRaw[Idx + 1], BackDataRaw[Idx + 2], BackDataRaw[Idx + 3]));
+            return new TextBufferEntry((char)foreDataRaw[Idx + 3],
+                new Color(foreDataRaw[Idx], foreDataRaw[Idx + 1], foreDataRaw[Idx + 2]),
+                new Color(backDataRaw[Idx], backDataRaw[Idx + 1], backDataRaw[Idx + 2], backDataRaw[Idx + 3]));
         }
 
         public TextBufferEntry this[int Idx]
@@ -186,18 +156,18 @@ namespace MinedOut
 
         public void Clear(char C, Color Fg, Color Bg)
         {
-            for (int i = 0; i < W * H; i++)
+            for (int i = 0; i < BufferWidth * BufferHeight; i++)
                 Set(i, C, Fg, Bg);
         }
 
         public void Print(int X, int Y, string Str)
         {
-            Print(Y * W + X, Str);
+            Print(Y * BufferWidth + X, Str);
         }
 
         public void Print(int X, int Y, string Str, Color Fg, Color Bg)
         {
-            Print(Y * W + X, Str, Fg, Bg);
+            Print(Y * BufferWidth + X, Str, Fg, Bg);
         }
 
         public void Print(int I, string Str)
@@ -213,21 +183,21 @@ namespace MinedOut
 
         void Update()
         {
-            if (!Dirty)
+            if (!dirty)
                 return;
-            Dirty = false;
-            ForeData.Update(ForeDataRaw);
-            BackData.Update(BackDataRaw);
+            dirty = false;
+            foreData.Update(foreDataRaw);
+            backData.Update(backDataRaw);
 
-            TextStates.Shader.SetParameter("font", ASCIIFont);
-            TextStates.Shader.SetParameter("foredata", ForeData);
-            TextStates.Shader.SetParameter("backdata", BackData);
-            TextStates.Shader.SetParameter("buffersize", W, H);
-            TextStates.Shader.SetParameter("fontsizes", CharW, CharH, ASCIIFont.Size.X / CharW, ASCIIFont.Size.Y / CharH);
+            textStates.Shader.SetParameter("font", asciiFont);
+            textStates.Shader.SetParameter("foredata", foreData);
+            textStates.Shader.SetParameter("backdata", backData);
+            textStates.Shader.SetParameter("buffersize", BufferWidth, BufferHeight);
+            textStates.Shader.SetParameter("fontsizes", CharWidth, CharHeight, asciiFont.Size.X / CharWidth, asciiFont.Size.Y / CharHeight);
 
-            RT.Clear(Color.Transparent);
-            RT.Draw(ScreenQuad, PrimitiveType.Quads, TextStates);
-            RT.Display();
+            rt.Clear(Color.Transparent);
+            rt.Draw(screenQuad, PrimitiveType.Quads, textStates);
+            rt.Display();
         }
 
         public void Draw(RenderTarget R, RenderStates S)
