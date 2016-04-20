@@ -10,6 +10,7 @@ namespace MinedOut
     {
         private static RenderWindow window;
         private static Minefield minefield;
+        private static TextBuffer buffer;
 
         private static void Main(string[] args)
         {
@@ -40,6 +41,9 @@ namespace MinedOut
             window.Size = new Vector2u(800, 600);
 
             minefield = new Minefield();
+            
+            buffer = new TextBuffer(80, 24);
+            buffer.SetFontTexture(new Texture("content/font.png"));
         }
 
         private static void UpdateDraw()
@@ -56,7 +60,11 @@ namespace MinedOut
                 var b = drawCommand.BackgroundColor;
                 var f = drawCommand.ForegroundColor;
                 var c = drawCommand.WrittenChar;
+
+                buffer.Set(x, y, c, f, b);
             }
+
+            buffer.Draw(window, RenderStates.Default);
 
             window.Display();
         }
