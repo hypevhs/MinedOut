@@ -191,7 +191,9 @@ namespace MinedOut
             textStates.Shader.SetParameter("foredata", foreData);
             textStates.Shader.SetParameter("backdata", backData);
             textStates.Shader.SetParameter("buffersize", BufferWidth, BufferHeight);
-            textStates.Shader.SetParameter("fontsizes", CharWidth, CharHeight, asciiFont.Size.X / CharWidth, asciiFont.Size.Y / CharHeight);
+            var fontSizeX = asciiFont.Size.X / CharWidth;
+            var fontSizeY = asciiFont.Size.Y / CharHeight;
+            textStates.Shader.SetParameter("fontsizes", CharWidth, CharHeight, fontSizeX, fontSizeY);
 
             rt.Clear(Color.Transparent);
             rt.Draw(screenQuad, PrimitiveType.Quads, textStates);
