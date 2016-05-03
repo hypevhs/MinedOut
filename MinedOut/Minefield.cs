@@ -48,8 +48,8 @@ namespace MinedOut
                 y = r.Next(SizeY);
 
                 //places not to put a mine: start, end, somewhere where a mine already exists
-                var badEnter = x == 0 && y == 0;
-                var badExit = x == SizeX - 1 && y == SizeY - 1;
+                var badEnter = x < 3 && y < 3;
+                var badExit = x > SizeX - 4 && y > SizeY - 4;
                 var badAlready = tiles[x, y] is MineTile;
                 if (!badEnter && !badExit && !badAlready)
                     break;
