@@ -17,6 +17,8 @@ namespace MinedOut
         private readonly Color gateColor = new Color(0xA8, 0x54, 0x00);
         private readonly Color borderColor = new Color(0xFC, 0xFC, 0x54);
         private readonly Color menuColor = new Color(0x00, 0x00, 0xA8);
+        private readonly Color menuBackColorA = new Color(0xA8, 0xA8, 0xA8);
+        private readonly Color menuBackColorB = new Color(0x00, 0xA8, 0xA8);
         public Minefield Minefield { get; }
         private readonly TextBuffer buffer;
         private readonly Player player;
@@ -65,8 +67,29 @@ namespace MinedOut
             drawCmds.PopCamera();
             drawCmds.PopCamera();
 
+            drawCmds.PushCamera(new Camera(BorderWidth, 0));
+            DrawGui(drawCmds);
+            drawCmds.PopCamera();
+
             DrawBorder(drawCmds);
             ProcessDrawCommands(target, states, drawCmds);
+        }
+
+        private void DrawGui(DrawCommandCollection drawCmds)
+        {
+            const int width = 20;
+            
+            drawCmds.AddRange(DrawCommand.FromString(2, 1, "     - - -      ", menuBackColorA, menuColor));
+            drawCmds.AddRange(DrawCommand.FromString(2, 2, "   MINED OUT!   ", Color.Black, menuBackColorA));
+            drawCmds.AddRange(DrawCommand.FromString(2, 3, "     - - -      ", menuBackColorA, menuColor));
+
+            drawCmds.AddRange(DrawCommand.FromString(4, 15, "  CONTROLS  ", Color.Black, menuBackColorA));
+
+            drawCmds.AddRange(DrawCommand.FromString(7, 17, " \x18\x19\x1A\x1B", Color.Black, menuBackColorB));
+            drawCmds.AddRange(DrawCommand.FromString(13, 17, "Move", Color.White, menuColor));
+
+            drawCmds.AddRange(DrawCommand.FromString(1, 18, " Shift \x18\x19\x1A\x1B", Color.Black, menuBackColorA));
+            drawCmds.AddRange(DrawCommand.FromString(13, 18, "Flag", Color.White, menuColor));
         }
 
         private void DrawGround(DrawCommandCollection drawCmds)
