@@ -83,6 +83,11 @@ namespace MinedOut
             drawCmds.AddRange(DrawCommand.FromString(2, 2, "   MINED OUT!   ", Color.Black, menuBackColorA));
             drawCmds.AddRange(DrawCommand.FromString(2, 3, "     - - -      ", menuBackColorA, menuColor));
 
+            if (IsWin)
+                drawCmds.AddRange(DrawCommand.FromString(4, 13, "  YOU  WIN  ", Color.Black, RandomColor));
+            if (IsLose)
+                drawCmds.AddRange(DrawCommand.FromString(4, 13, "  YOU LOSE  ", Color.Black, RandomColor));
+
             drawCmds.AddRange(DrawCommand.FromString(4, 15, "  CONTROLS  ", Color.Black, menuBackColorA));
 
             drawCmds.AddRange(DrawCommand.FromString(7, 17, " \x18\x19\x1A\x1B", Color.Black, menuBackColorB));
@@ -91,6 +96,12 @@ namespace MinedOut
             drawCmds.AddRange(DrawCommand.FromString(1, 18, " Shift \x18\x19\x1A\x1B", Color.Black, menuBackColorA));
             drawCmds.AddRange(DrawCommand.FromString(13, 18, "Flag", Color.White, menuColor));
         }
+
+        public Color RandomColor => new Color(
+            (byte)RandomProvider.Random.Next(256),
+            (byte)RandomProvider.Random.Next(256),
+            (byte)RandomProvider.Random.Next(256)
+        );
 
         private void DrawGround(DrawCommandCollection drawCmds)
         {
