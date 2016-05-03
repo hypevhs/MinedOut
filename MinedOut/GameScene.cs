@@ -81,6 +81,10 @@ namespace MinedOut
             drawCmds.AddRange(DrawCommand.FromString(2, 1, "     - - -      ", menuBackColorA, menuColor));
             drawCmds.AddRange(DrawCommand.FromString(2, 2, "   MINED OUT!   ", Color.Black, menuBackColorA));
             drawCmds.AddRange(DrawCommand.FromString(2, 3, "     - - -      ", menuBackColorA, menuColor));
+            
+            drawCmds.AddRange(DrawCommand.FromString(2, 5, "   There  are   ", Color.Black, menuBackColorB));
+            drawCmds.AddRange(DrawCommand.FromString(2, 6,$"      {Minefield.NumMines,-2}       ", Color.Black, menuBackColorA));
+            drawCmds.AddRange(DrawCommand.FromString(2, 7, "   mines here   ", Color.Black, menuBackColorB));
 
             if (IsWin)
                 drawCmds.AddRange(DrawCommand.FromString(4, 13, "  YOU  WIN  ", Color.Black, RandomColor));
