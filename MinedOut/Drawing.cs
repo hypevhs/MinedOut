@@ -94,8 +94,8 @@ namespace MinedOut
     /// </summary>
     internal class Camera
     {
-        public int Dx { get; private set; }
-        public int Dy { get; private set; }
+        public int Dx { get; }
+        public int Dy { get; }
 
         public Camera(int dx, int dy)
         {
