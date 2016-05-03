@@ -19,7 +19,7 @@ namespace MinedOut
 
         public Player(GameScene scene)
         {
-            Minefield = minefield;
+            this.scene = scene;
         }
 
         public void Update()
