@@ -15,6 +15,7 @@ namespace MinedOut
         public int Y { get; set; }
 
         private bool AtExitPos => X == Minefield.SizeX - 1 && Y == Minefield.SizeY - 1;
+        private bool BombAtPos => scene.Minefield.GetTile(X, Y) is MineTile;
         private readonly Color groundColor = new Color(0xC0, 0xC0, 0xC0);
 
         public Player(GameScene scene)
@@ -26,9 +27,14 @@ namespace MinedOut
         {
             UpdatePosition();
 
+            if (BombAtPos)
+            {
+                scene.Lose();
+            }
+
             if (AtExitPos)
             {
-                //TODO
+                scene.Win();
             }
         }
 

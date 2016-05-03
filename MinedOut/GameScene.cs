@@ -17,8 +17,11 @@ namespace MinedOut
         private readonly Color gateColor = new Color(0xA8, 0x54, 0x00);
         private readonly Color borderColor = new Color(0xFC, 0xFC, 0x54);
         private readonly Color menuColor = new Color(0x00, 0x00, 0xA8);
+        public Minefield Minefield { get; }
         private readonly TextBuffer buffer;
         private readonly Player player;
+        private bool IsWin { get; set; }
+        private bool IsLose { get; set; }
 
         public GameScene()
         {
@@ -31,7 +34,20 @@ namespace MinedOut
         public void Update()
         {
             Controls.Update();
-            player.Update();
+            if (!IsWin && !IsLose)
+            {
+                player.Update();
+            }
+        }
+
+        public void Win()
+        {
+            IsWin = true;
+        }
+
+        public void Lose()
+        {
+            IsLose = true;
         }
 
         public void Draw(RenderTarget target, RenderStates states)
