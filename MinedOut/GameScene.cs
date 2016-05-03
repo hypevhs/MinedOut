@@ -9,8 +9,8 @@ namespace MinedOut
 {
     internal class GameScene : Drawable
     {
-        private static TextBuffer buffer;
-        private static Minefield minefield;
+        private readonly TextBuffer buffer;
+        private readonly Minefield minefield;
 
         public GameScene()
         {
@@ -22,13 +22,13 @@ namespace MinedOut
 
         public void Draw(RenderTarget target, RenderStates states)
         {
-            var list = new List<DrawCommand>();
-            list.AddRange(minefield.Draw());
+            DrawCommandCollection drawCmds = new DrawCommandCollection();
+            minefield.Draw(drawCmds);
 
-            ProcessDrawCommands(target, states, list);
+            ProcessDrawCommands(target, states, drawCmds);
         }
 
-        private void ProcessDrawCommands(RenderTarget target, RenderStates states, List<DrawCommand> drawCmds)
+        private void ProcessDrawCommands(RenderTarget target, RenderStates states, DrawCommandCollection drawCmds)
         {
             foreach (var drawCommand in drawCmds)
             {

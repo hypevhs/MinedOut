@@ -27,18 +27,16 @@ namespace MinedOut
             }
         }
 
-        public List<DrawCommand> Draw()
+        public void Draw(DrawCommandCollection drawCmds)
         {
-            var cmds = new List<DrawCommand>();
             for (var y = 0; y < SizeY; y++)
             {
                 for (var x = 0; x < SizeX; x++)
                 {
                     var tile = tiles[x, y];
-                    cmds.AddRange(tile.Draw());
+                    tile.Draw(drawCmds);
                 }
             }
-            return cmds;
         }
     }
 }

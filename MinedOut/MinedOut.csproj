@@ -82,8 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DrawCommand.cs" />
-    <Compile Include="IGameDrawable.cs" />
+    <Compile Include="Drawing.cs" />
     <Compile Include="Minefield.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

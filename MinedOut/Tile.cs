@@ -18,12 +18,10 @@ namespace MinedOut
             Y = y;
         }
 
-        public List<DrawCommand> Draw()
+        public void Draw(DrawCommandCollection drawCmds)
         {
-            return new List<DrawCommand>
-            {
-                new DrawCommand(X, Y, '*', Color.Red, Color.Cyan)
-            };
+            var drawCmd = new DrawCommand(X, Y, '*', Color.Red, Color.Cyan);
+            drawCmds.Add(drawCmd);
         }
     }
 
