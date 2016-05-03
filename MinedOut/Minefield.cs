@@ -36,16 +36,14 @@ namespace MinedOut
 
         private void PlaceMine()
         {
-            var r = new Random();
-
             //get random coord
             int x;
             int y;
 
             while (true)
             {
-                x = r.Next(SizeX);
-                y = r.Next(SizeY);
+                x = RandomProvider.Random.Next(SizeX);
+                y = RandomProvider.Random.Next(SizeY);
 
                 //places not to put a mine: start, end, somewhere where a mine already exists
                 var badEnter = x < 3 && y < 3;
