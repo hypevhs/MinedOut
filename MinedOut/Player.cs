@@ -54,8 +54,8 @@ namespace MinedOut
 
         private bool CanWalk(int nextPosX, int nextPosY)
         {
-            return nextPosX >= 0 && nextPosX < Minefield.SizeX
-                && nextPosY >= 0 && nextPosY < Minefield.SizeY;
+            //TODO: it's a dumb mistake to walk on a flag
+            return scene.Minefield.IsInRange(nextPosX, nextPosY);
         }
 
         public void Draw(DrawCommandCollection drawCmds)
