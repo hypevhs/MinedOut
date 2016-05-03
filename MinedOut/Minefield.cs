@@ -11,6 +11,7 @@ namespace MinedOut
     {
         public const int SizeX = 54;
         public const int SizeY = 19;
+        public const int NumMines = 200;
 
         private readonly Tile[,] tiles;
 
@@ -27,7 +28,7 @@ namespace MinedOut
             }
 
             //now place mines
-            for (var i = 0; i < 200; i++)
+            for (var i = 0; i < NumMines; i++)
             {
                 PlaceMine();
             }
