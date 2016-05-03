@@ -25,6 +25,7 @@ namespace MinedOut
             buffer = new TextBuffer(TerminalW, TerminalH, new Texture("content/fontdos.png"), 9, 16);
 
             minefield = new Minefield();
+            player = new Player(minefield);
         }
 
         public void Draw(RenderTarget target, RenderStates states)
