@@ -47,10 +47,9 @@ namespace MinedOut
         private static void UpdateDraw()
         {
             window.DispatchEvents();
+            gameScene.Update();
             window.Clear();
-            
             window.Draw(gameScene);
-
             window.Display();
         }
     }

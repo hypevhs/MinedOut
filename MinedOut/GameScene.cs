@@ -29,6 +29,11 @@ namespace MinedOut
             player = new Player(minefield);
         }
 
+        public void Update()
+        {
+            player.Update();
+        }
+
         public void Draw(RenderTarget target, RenderStates states)
         {
             var drawCmds = new DrawCommandCollection();

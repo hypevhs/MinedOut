@@ -58,6 +58,12 @@ namespace MinedOut
             tiles[x, y] = new MineTile(x, y);
         }
 
+        public Tile GetTile(int x, int y)
+        {
+            //TODO range check
+            return tiles[x, y];
+        }
+
         public void Draw(DrawCommandCollection drawCmds)
         {
             for (var y = 0; y < SizeY; y++)
