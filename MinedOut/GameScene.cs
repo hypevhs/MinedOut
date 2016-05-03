@@ -31,6 +31,7 @@ namespace MinedOut
 
         public void Update()
         {
+            Controls.Update();
             player.Update();
         }
 

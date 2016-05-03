@@ -14,11 +14,6 @@ namespace MinedOut
         public int X { get; set; }
         public int Y { get; set; }
 
-        private bool ControlsMoveUp { get; set; }
-        private bool ControlsMoveDn { get; set; }
-        private bool ControlsMoveLf { get; set; }
-        private bool ControlsMoveRt { get; set; }
-
         private bool AtExitPos => X == Minefield.SizeX - 1 && Y == Minefield.SizeY - 1;
         private readonly Color groundColor = new Color(0xC0, 0xC0, 0xC0);
 
@@ -29,7 +24,6 @@ namespace MinedOut
 
         public void Update()
         {
-            GetControls();
             UpdatePosition();
 
             if (AtExitPos)
@@ -41,8 +35,8 @@ namespace MinedOut
         private void UpdatePosition()
         {
             //get next pos
-            var nextPosX = X + (ControlsMoveRt ? 1 : 0) + (ControlsMoveLf ? -1 : 0);
-            var nextPosY = Y + (ControlsMoveDn ? 1 : 0) + (ControlsMoveUp ? -1 : 0);
+            var nextPosX = X + (Controls.MoveRt ? 1 : 0) + (Controls.MoveLf ? -1 : 0);
+            var nextPosY = Y + (Controls.MoveDn ? 1 : 0) + (Controls.MoveUp ? -1 : 0);
 
             //move if no wall blocking our way
             if (CanWalk(nextPosX, nextPosY))
@@ -56,14 +50,6 @@ namespace MinedOut
         {
             return nextPosX >= 0 && nextPosX < Minefield.SizeX
                 && nextPosY >= 0 && nextPosY < Minefield.SizeY;
-        }
-
-        private void GetControls()
-        {
-            ControlsMoveUp = Keyboard.IsKeyPressed(Keyboard.Key.Up);
-            ControlsMoveDn = Keyboard.IsKeyPressed(Keyboard.Key.Down);
-            ControlsMoveLf = Keyboard.IsKeyPressed(Keyboard.Key.Left);
-            ControlsMoveRt = Keyboard.IsKeyPressed(Keyboard.Key.Right);
         }
 
         public void Draw(DrawCommandCollection drawCmds)
