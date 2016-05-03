@@ -9,12 +9,14 @@ namespace MinedOut
 {
     internal class GameScene : Drawable
     {
+        private const int TerminalW = 80;
+        private const int TerminalH = 24;
         private readonly TextBuffer buffer;
         private readonly Minefield minefield;
 
         public GameScene()
         {
-            buffer = new TextBuffer(80, 24, new Texture("content/fontdos.png"), 9, 16);
+            buffer = new TextBuffer(TerminalW, TerminalH, new Texture("content/fontdos.png"), 9, 16);
 
             minefield = new Minefield();
         }
