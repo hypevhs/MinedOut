@@ -69,8 +69,12 @@ namespace MinedOut
         private void UpdatePosition()
         {
             //get next pos
-            var nextPosX = X + (Controls.MoveRt ? 1 : 0) + (Controls.MoveLf ? -1 : 0);
-            var nextPosY = Y + (Controls.MoveDn ? 1 : 0) + (Controls.MoveUp ? -1 : 0);
+            var nextPosX = X;
+            var nextPosY = Y;
+            if (Controls.MoveLf || Controls.MoveRt) //prioritize LR in the event of a diagonal input
+                nextPosX += (Controls.MoveRt ? 1 : 0) + (Controls.MoveLf ? -1 : 0);
+            else
+                nextPosY += (Controls.MoveDn ? 1 : 0) + (Controls.MoveUp ? -1 : 0);
 
             //move if no wall blocking our way
             if (CanWalk(nextPosX, nextPosY))
