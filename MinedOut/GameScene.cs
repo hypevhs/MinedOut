@@ -18,6 +18,7 @@ namespace MinedOut
         private readonly Color borderColor = new Color(0xFC, 0xFC, 0x54);
         private readonly TextBuffer buffer;
         private readonly Minefield minefield;
+        private readonly Player player;
 
         public GameScene()
         {
@@ -36,6 +37,7 @@ namespace MinedOut
             DrawGate(drawCmds);
             drawCmds.PushCamera(new Camera(1, 1));
             minefield.Draw(drawCmds);
+            player.Draw(drawCmds);
             drawCmds.PopCamera();
             drawCmds.PopCamera();
             drawCmds.PopCamera();
