@@ -6,15 +6,15 @@ using SFML.System;
 
 namespace MinedOut
 {
-    internal class DrawCommandCollection : IEnumerable
+    internal class DrawCommandCollection : IEnumerable<DrawCommand>
     {
-        private readonly List<DrawCommand> cmds;
+        private readonly List<DrawCommand> drawCommands;
         private readonly Stack<Camera> cameraAngles;
 
-        public DrawCommandCollection(Stack<Camera> cameraAngles)
+        public DrawCommandCollection()
         {
-            this.cameraAngles = cameraAngles;
-            cmds = new List<DrawCommand>();
+            cameraAngles = new Stack<Camera>();
+            drawCommands = new List<DrawCommand>();
         }
 
         public void Add(DrawCommand item)
@@ -23,12 +23,12 @@ namespace MinedOut
             var offset = GetCameraOffset();
             item.X += offset.X;
             item.Y += offset.Y;
-            cmds.Add(item);
+            drawCommands.Add(item);
         }
 
-        public int Count => cmds.Count;
+        public int Count => drawCommands.Count;
 
-        public DrawCommand this[int index] => cmds[index];
+        public DrawCommand this[int index] => drawCommands[index];
 
         public void PushCamera(Camera cam)
         {
@@ -47,9 +47,14 @@ namespace MinedOut
             return new Vector2i(finalDx, finalDy);
         }
 
-        public IEnumerator GetEnumerator()
+        public IEnumerator<DrawCommand> GetEnumerator()
         {
-            return cmds.GetEnumerator();
+            return drawCommands.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 
