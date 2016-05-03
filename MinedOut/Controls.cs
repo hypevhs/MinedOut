@@ -4,15 +4,14 @@ namespace MinedOut
 {
     internal static class Controls
     {
-        public static bool MoveUp => CurrMoveUp && !LastMoveUp;
-        public static bool MoveDn => CurrMoveDn && !LastMoveDn;
-        public static bool MoveLf => CurrMoveLf && !LastMoveLf;
-        public static bool MoveRt => CurrMoveRt && !LastMoveRt;
-        public static bool Flag => CurrFlag && !LastFlag;
-        public static bool FlagUp => CurrMoveUp && Flag;
-        public static bool FlagDn => CurrMoveDn && Flag;
-        public static bool FlagLf => CurrMoveLf && Flag;
-        public static bool FlagRt => CurrMoveRt && Flag;
+        public static bool MoveUp => CurrMoveUp && !LastMoveUp && !CurrFlag;
+        public static bool MoveDn => CurrMoveDn && !LastMoveDn && !CurrFlag;
+        public static bool MoveLf => CurrMoveLf && !LastMoveLf && !CurrFlag;
+        public static bool MoveRt => CurrMoveRt && !LastMoveRt && !CurrFlag;
+        public static bool FlagUp => CurrMoveUp && !LastMoveUp && CurrFlag;
+        public static bool FlagDn => CurrMoveDn && !LastMoveDn && CurrFlag;
+        public static bool FlagLf => CurrMoveLf && !LastMoveLf && CurrFlag;
+        public static bool FlagRt => CurrMoveRt && !LastMoveRt && CurrFlag;
 
         private static bool LastMoveUp { get; set; }
         private static bool LastMoveDn { get; set; }
@@ -22,8 +21,6 @@ namespace MinedOut
         private static bool CurrMoveDn { get; set; }
         private static bool CurrMoveLf { get; set; }
         private static bool CurrMoveRt { get; set; }
-
-        private static bool LastFlag { get; set; }
         private static bool CurrFlag { get; set; }
 
         public static void Update()
@@ -32,7 +29,6 @@ namespace MinedOut
             LastMoveDn = CurrMoveDn;
             LastMoveLf = CurrMoveLf;
             LastMoveRt = CurrMoveRt;
-            LastFlag = CurrFlag;
 
             CurrMoveUp = Keyboard.IsKeyPressed(Keyboard.Key.Up);
             CurrMoveDn = Keyboard.IsKeyPressed(Keyboard.Key.Down);
