@@ -159,6 +159,11 @@ namespace MinedOut
                 var f = drawCommand.ForegroundColor;
                 var c = drawCommand.WrittenChar;
 
+                if (b == Color.Transparent)
+                    b = buffer.Get(x, y).Back;
+                if (f == Color.Transparent)
+                    f = buffer.Get(x, y).Fore;
+
                 buffer.Set(x, y, c, f, b);
             }
 

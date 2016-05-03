@@ -16,7 +16,7 @@ namespace MinedOut
 
         private bool AtExitPos => X == Minefield.SizeX - 1 && Y == Minefield.SizeY - 1;
         private bool BombAtPos => scene.Minefield.GetTile(X, Y) is MineTile;
-        private readonly Color groundColor = new Color(0xC0, 0xC0, 0xC0);
+        private readonly Color groundColor = Color.Transparent;
         private readonly Color playerColor = Color.Black;
 
         public Player(GameScene scene)
