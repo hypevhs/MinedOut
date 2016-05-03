@@ -9,9 +9,9 @@ namespace MinedOut
 {
     internal abstract class Tile : IGameDrawable
     {
-        private readonly Color groundColor = new Color(0xC0, 0xC0, 0xC0);
-        private int X { get; }
-        private int Y { get; }
+        protected readonly Color GroundColor = new Color(0xC0, 0xC0, 0xC0);
+        protected int X { get; }
+        protected int Y { get; }
 
         protected Tile(int x, int y)
         {
@@ -19,9 +19,18 @@ namespace MinedOut
             Y = y;
         }
 
-        public void Draw(DrawCommandCollection drawCmds)
+        public abstract void Draw(DrawCommandCollection drawCmds);
+    }
+
+    internal class GroundTile : Tile
+    {
+        public GroundTile(int x, int y) : base(x, y)
         {
-            var drawCmd = new DrawCommand(X, Y, ' ', Color.Red, groundColor);
+        }
+
+        public override void Draw(DrawCommandCollection drawCmds)
+        {
+            var drawCmd = new DrawCommand(X, Y, ' ', Color.Red, GroundColor);
             drawCmds.Add(drawCmd);
         }
     }
@@ -30,6 +39,12 @@ namespace MinedOut
     {
         public MineTile(int x, int y) : base(x, y)
         {
+        }
+
+        public override void Draw(DrawCommandCollection drawCmds)
+        {
+            var drawCmd = new DrawCommand(X, Y, '*', Color.Red, GroundColor);
+            drawCmds.Add(drawCmd);
         }
     }
 }
