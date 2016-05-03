@@ -77,8 +77,6 @@ namespace MinedOut
 
         private void DrawGui(DrawCommandCollection drawCmds)
         {
-            const int width = 20;
-            
             drawCmds.AddRange(DrawCommand.FromString(2, 1, "     - - -      ", menuBackColorA, menuColor));
             drawCmds.AddRange(DrawCommand.FromString(2, 2, "   MINED OUT!   ", Color.Black, menuBackColorA));
             drawCmds.AddRange(DrawCommand.FromString(2, 3, "     - - -      ", menuBackColorA, menuColor));
