@@ -10,7 +10,7 @@ namespace MinedOut
     internal class GameScene : Drawable
     {
         private const int TerminalW = 80;
-        private const int TerminalH = 24;
+        private const int TerminalH = 25;
         private readonly TextBuffer buffer;
         private readonly Minefield minefield;
 
