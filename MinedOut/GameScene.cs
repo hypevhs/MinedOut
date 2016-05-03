@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SFML.Graphics;
 
 namespace MinedOut
@@ -24,24 +20,34 @@ namespace MinedOut
         public void Draw(RenderTarget target, RenderStates states)
         {
             DrawCommandCollection drawCmds = new DrawCommandCollection();
-            
-            drawCmds.PushCamera(new Camera(30, 0));
-            DrawTest(drawCmds);
+
+            drawCmds.PushCamera(new Camera(2, 2));
+            minefield.Draw(drawCmds);
             drawCmds.PopCamera();
 
-            minefield.Draw(drawCmds);
-
+            DrawBorder(drawCmds);
             ProcessDrawCommands(target, states, drawCmds);
         }
 
-        private void DrawTest(DrawCommandCollection drawCmds)
+        private void DrawBorder(DrawCommandCollection drawCmds)
         {
-            for (var i = 0; i < 255; i++)
+            const char bChar = (char) 0xb0;
+            var bColor = new Color(0xFC, 0xFC, 0x54);
+
+            for (var x = 0; x < TerminalW; x++)
             {
-                var x = i % 16;
-                var y = i / 16;
-                var swap = i % 2 == 0;
-                drawCmds.Add(new DrawCommand(x, y, (char)i, Color.White, swap ? Color.Black : new Color(0x7f, 0x7f, 0x7f)));
+                var top = new DrawCommand(x, 0, bChar, Color.Black, bColor);
+                var btm = new DrawCommand(x, TerminalH - 1, bChar, Color.Black, bColor);
+                drawCmds.Add(top);
+                drawCmds.Add(btm);
+            }
+
+            for (var y = 0; y < TerminalH; y++)
+            {
+                var left = new DrawCommand(0, y, bChar, Color.Black, bColor);
+                var right = new DrawCommand(TerminalW - 1, y, bChar, Color.Black, bColor);
+                drawCmds.Add(left);
+                drawCmds.Add(right);
             }
         }
 
