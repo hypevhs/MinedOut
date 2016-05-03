@@ -9,6 +9,7 @@ namespace MinedOut
 {
     internal abstract class Tile : IGameDrawable
     {
+        private readonly Color groundColor = new Color(0xC0, 0xC0, 0xC0);
         private int X { get; }
         private int Y { get; }
 
@@ -20,7 +21,7 @@ namespace MinedOut
 
         public void Draw(DrawCommandCollection drawCmds)
         {
-            var drawCmd = new DrawCommand(X, Y, '*', Color.Red, Color.Cyan);
+            var drawCmd = new DrawCommand(X, Y, ' ', Color.Red, groundColor);
             drawCmds.Add(drawCmd);
         }
     }
