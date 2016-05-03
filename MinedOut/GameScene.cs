@@ -21,7 +21,7 @@ namespace MinedOut
         {
             DrawCommandCollection drawCmds = new DrawCommandCollection();
 
-            drawCmds.PushCamera(new Camera(2, 2));
+            drawCmds.PushCamera(new Camera(1, 1));
             minefield.Draw(drawCmds);
             drawCmds.PopCamera();
 
@@ -31,21 +31,23 @@ namespace MinedOut
 
         private void DrawBorder(DrawCommandCollection drawCmds)
         {
-            const char bChar = (char) 0xb0;
+            const char bChar = ' ';
             var bColor = new Color(0xFC, 0xFC, 0x54);
+            const int width = TerminalW - 20;
+            const int height = TerminalH;
 
-            for (var x = 0; x < TerminalW; x++)
+            for (var x = 0; x < width; x++)
             {
                 var top = new DrawCommand(x, 0, bChar, Color.Black, bColor);
-                var btm = new DrawCommand(x, TerminalH - 1, bChar, Color.Black, bColor);
+                var btm = new DrawCommand(x, height - 1, bChar, Color.Black, bColor);
                 drawCmds.Add(top);
                 drawCmds.Add(btm);
             }
 
-            for (var y = 0; y < TerminalH; y++)
+            for (var y = 0; y < height; y++)
             {
                 var left = new DrawCommand(0, y, bChar, Color.Black, bColor);
-                var right = new DrawCommand(TerminalW - 1, y, bChar, Color.Black, bColor);
+                var right = new DrawCommand(width - 1, y, bChar, Color.Black, bColor);
                 drawCmds.Add(left);
                 drawCmds.Add(right);
             }
@@ -53,6 +55,8 @@ namespace MinedOut
 
         private void ProcessDrawCommands(RenderTarget target, RenderStates states, DrawCommandCollection drawCmds)
         {
+            buffer.Clear(' ', Color.White, new Color(0x00,0x00,0xA8));
+
             foreach (var drawCommand in drawCmds)
             {
                 var x = drawCommand.X;
