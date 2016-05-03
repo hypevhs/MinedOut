@@ -9,8 +9,8 @@ namespace MinedOut
 {
     internal class Minefield : IGameDrawable
     {
-        private const int SizeX = 54;
-        private const int SizeY = 19;
+        public const int SizeX = 54;
+        public const int SizeY = 19;
 
         private readonly Tile[,] tiles;
 

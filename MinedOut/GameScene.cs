@@ -16,6 +16,7 @@ namespace MinedOut
         private readonly Color groundColor = new Color(0xC0, 0xC0, 0xC0);
         private readonly Color gateColor = new Color(0xA8, 0x54, 0x00);
         private readonly Color borderColor = new Color(0xFC, 0xFC, 0x54);
+        private readonly Color menuColor = new Color(0x00, 0x00, 0xA8);
         private readonly TextBuffer buffer;
         private readonly Minefield minefield;
         private readonly Player player;
@@ -30,7 +31,7 @@ namespace MinedOut
 
         public void Draw(RenderTarget target, RenderStates states)
         {
-            DrawCommandCollection drawCmds = new DrawCommandCollection();
+            var drawCmds = new DrawCommandCollection();
 
             drawCmds.PushCamera(new Camera(1, 1));
             DrawGround(drawCmds);
