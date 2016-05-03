@@ -38,13 +38,14 @@ namespace MinedOut
         private readonly byte[] foreDataRaw;
         private readonly byte[] backDataRaw;
 
-        public TextBuffer(uint w, uint h)
+        public TextBuffer(uint w, uint h, Texture fnt, int charW, int charH)
         {
             BufferWidth = (int)w;
             BufferHeight = (int)h;
+            asciiFont = fnt;
             dirty = true;
-            CharWidth = 8;
-            CharHeight = 12;
+            CharWidth = charW;
+            CharHeight = charH;
 
             foreDataRaw = new byte[w * h * 4];
             foreData = new Texture(new Image(w, h, foreDataRaw)) {Smooth = false};
@@ -70,14 +71,6 @@ namespace MinedOut
             };
 
             Clear();
-        }
-
-        public void SetFontTexture(Texture fnt, int charW = 8, int charH = 12)
-        {
-            CharWidth = charW;
-            CharHeight = charH;
-            asciiFont = fnt;
-            dirty = true;
         }
 
         public void Set(int x, int y, char c, Color fg, Color bg)
