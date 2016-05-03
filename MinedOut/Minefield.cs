@@ -76,5 +76,11 @@ namespace MinedOut
                 }
             }
         }
+
+        public bool IsInRange(int x, int y)
+        {
+            return x >= 0 && x < SizeX
+                && y >= 0 && y < SizeY;
+        }
     }
 }
