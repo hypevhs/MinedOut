@@ -8,8 +8,8 @@ namespace MinedOut
 {
     internal static class Program
     {
-        private const int WindowW = 80*8;
-        private const int WindowH = 24*12;
+        private const int WindowW = 80*9;
+        private const int WindowH = 24*16;
         private static RenderWindow window;
         private static GameScene gameScene;
 

@@ -14,8 +14,7 @@ namespace MinedOut
 
         public GameScene()
         {
-            buffer = new TextBuffer(80, 24);
-            buffer.SetFontTexture(new Texture("content/font.png"));
+            buffer = new TextBuffer(80, 24, new Texture("content/fontdos.png"), 9, 16);
 
             minefield = new Minefield();
         }
