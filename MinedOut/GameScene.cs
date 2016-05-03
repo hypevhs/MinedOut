@@ -48,6 +48,7 @@ namespace MinedOut
 
             drawCmds.PushCamera(new Camera(1, 1));
             DrawGround(drawCmds);
+            DrawMineDetector(drawCmds);
             drawCmds.PushCamera(new Camera(1, 1));
             DrawGate(drawCmds);
             drawCmds.PushCamera(new Camera(1, 1));
@@ -63,6 +64,16 @@ namespace MinedOut
 
             DrawBorder(drawCmds);
             ProcessDrawCommands(target, states, drawCmds);
+        }
+
+        private void DrawMineDetector(DrawCommandCollection drawCmds)
+        {
+            var mineCount = Minefield.GetAdjacentMines(player.X, player.Y);
+            if (mineCount > 0)
+            {
+                var str = $"{mineCount} MINES ADJACENT";
+                drawCmds.AddRange(DrawCommand.FromString(GroundWidth/2 - str.Length/2, 0, str, Color.Black, menuBackColorA));
+            }
         }
 
         private void DrawGui(DrawCommandCollection drawCmds)

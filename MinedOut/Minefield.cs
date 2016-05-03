@@ -82,5 +82,25 @@ namespace MinedOut
             return x >= 0 && x < SizeX
                 && y >= 0 && y < SizeY;
         }
+
+        public int GetAdjacentMines(int x, int y)
+        {
+            var count = 0;
+            for (var dy = -1; dy <= 1; dy++)
+            {
+                for (var dx = -1; dx <= 1; dx++)
+                {
+                    if (dx == 0 && dy == 0)
+                        continue;
+                    var thisX = x + dx;
+                    var thisY = y + dy;
+                    if (!IsInRange(thisX, thisY))
+                        continue;
+                    if (tiles[thisX, thisY] is MineTile)
+                        count++;
+                }
+            }
+            return count;
+        }
     }
 }
