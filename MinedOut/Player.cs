@@ -10,14 +10,14 @@ namespace MinedOut
 {
     internal class Player : IGameDrawable
     {
-        private Minefield Minefield { get; }
+        private readonly GameScene scene;
         public int X { get; set; }
         public int Y { get; set; }
 
         private bool AtExitPos => X == Minefield.SizeX - 1 && Y == Minefield.SizeY - 1;
         private readonly Color groundColor = new Color(0xC0, 0xC0, 0xC0);
 
-        public Player(Minefield minefield)
+        public Player(GameScene scene)
         {
             Minefield = minefield;
         }

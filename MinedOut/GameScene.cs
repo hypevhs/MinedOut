@@ -18,15 +18,14 @@ namespace MinedOut
         private readonly Color borderColor = new Color(0xFC, 0xFC, 0x54);
         private readonly Color menuColor = new Color(0x00, 0x00, 0xA8);
         private readonly TextBuffer buffer;
-        private readonly Minefield minefield;
         private readonly Player player;
 
         public GameScene()
         {
             buffer = new TextBuffer(TerminalW, TerminalH, new Texture("content/fontdos.png"), 9, 16);
 
-            minefield = new Minefield();
-            player = new Player(minefield);
+            Minefield = new Minefield();
+            player = new Player(this);
         }
 
         public void Update()
@@ -44,7 +43,7 @@ namespace MinedOut
             drawCmds.PushCamera(new Camera(1, 1));
             DrawGate(drawCmds);
             drawCmds.PushCamera(new Camera(1, 1));
-            minefield.Draw(drawCmds);
+            Minefield.Draw(drawCmds);
             player.Draw(drawCmds);
             drawCmds.PopCamera();
             drawCmds.PopCamera();
