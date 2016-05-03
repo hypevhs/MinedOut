@@ -15,7 +15,7 @@ namespace MinedOut
         private const int GateHeight = GroundHeight - 2;
         private readonly Color groundColor = new Color(0xC0, 0xC0, 0xC0);
         private readonly Color gateColor = new Color(0xA8, 0x54, 0x00);
-        private readonly Color borderColor = new Color(0xFC, 0xFC, 0x54);
+        private readonly Color borderColor = new Color(0x00, 0x00, 0x7E);
         private readonly Color menuColor = new Color(0x00, 0x00, 0xA8);
         private readonly Color menuBackColorA = new Color(0xA8, 0xA8, 0xA8);
         private readonly Color menuBackColorB = new Color(0x00, 0xA8, 0xA8);
