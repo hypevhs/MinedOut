@@ -21,9 +21,8 @@ namespace MinedOut
         {
             //translate by all camera offsets
             var offset = GetCameraOffset();
-            item.X += offset.X;
-            item.Y += offset.Y;
-            drawCommands.Add(item);
+            var translatedItem = item.TranslatedClone(offset.X, offset.Y);
+            drawCommands.Add(translatedItem);
         }
 
         public int Count => drawCommands.Count;
@@ -60,11 +59,11 @@ namespace MinedOut
 
     internal class DrawCommand
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public char WrittenChar { get; set; }
-        public Color ForegroundColor { get; set; }
-        public Color BackgroundColor { get; set; }
+        public int X { get; }
+        public int Y { get; }
+        public char WrittenChar { get; }
+        public Color ForegroundColor { get; }
+        public Color BackgroundColor { get; }
 
         public DrawCommand(int x, int y, char writtenChar, Color foregroundColor, Color backgroundColor)
         {
@@ -73,6 +72,11 @@ namespace MinedOut
             WrittenChar = writtenChar;
             ForegroundColor = foregroundColor;
             BackgroundColor = backgroundColor;
+        }
+
+        public DrawCommand TranslatedClone(int dx, int dy)
+        {
+            return new DrawCommand(X + dx, Y + dy, WrittenChar, ForegroundColor, BackgroundColor);
         }
     }
 
