@@ -27,6 +27,7 @@ namespace MinedOut
         public void Update()
         {
             UpdatePosition();
+            MakeDigMark();
             PlaceFlags();
 
             if (BombAtPos)
@@ -38,6 +39,12 @@ namespace MinedOut
             {
                 scene.Win();
             }
+        }
+
+        private void MakeDigMark()
+        {
+            var tile = scene.Minefield.GetTile(X, Y);
+            tile.Dug = true;
         }
 
         private void PlaceFlags()
