@@ -32,12 +32,12 @@ namespace MinedOut
 
             if (BombAtPos)
             {
-                scene.Lose();
+                scene.IsLose = true;
             }
 
             if (AtExitPos)
             {
-                scene.Win();
+                scene.IsWin = true;
             }
         }
 

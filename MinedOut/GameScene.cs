@@ -22,8 +22,8 @@ namespace MinedOut
         public Minefield Minefield { get; }
         private readonly TextBuffer buffer;
         private readonly Player player;
-        private bool IsWin { get; set; }
-        private bool IsLose { get; set; }
+        public bool IsWin { get; set; }
+        public bool IsLose { get; set; }
 
         public GameScene()
         {
@@ -40,16 +40,6 @@ namespace MinedOut
             {
                 player.Update();
             }
-        }
-
-        public void Win()
-        {
-            IsWin = true;
-        }
-
-        public void Lose()
-        {
-            IsLose = true;
         }
 
         public void Draw(RenderTarget target, RenderStates states)
