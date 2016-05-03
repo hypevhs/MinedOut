@@ -104,7 +104,8 @@ namespace MinedOut
 
         private void ProcessDrawCommands(RenderTarget target, RenderStates states, DrawCommandCollection drawCmds)
         {
-            buffer.Clear(' ', Color.White, new Color(0x00,0x00,0xA8));
+            var clearColor = menuColor;
+            buffer.Clear(' ', Color.White, clearColor);
 
             foreach (var drawCommand in drawCmds)
             {
