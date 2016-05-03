@@ -55,6 +55,14 @@ namespace MinedOut
         {
             return GetEnumerator();
         }
+
+        public void AddRange(List<DrawCommand> moreCmds)
+        {
+            foreach (var cmd in moreCmds)
+            {
+                Add(cmd);
+            }
+        }
     }
 
     internal class DrawCommand
@@ -72,6 +80,20 @@ namespace MinedOut
             WrittenChar = writtenChar;
             ForegroundColor = foregroundColor;
             BackgroundColor = backgroundColor;
+        }
+
+        /// <summary>
+        /// Creates many <see cref="DrawCommand"/>s to facilitate the drawing of a string
+        /// </summary>
+        public static List<DrawCommand> FromString(int x, int y, string str, Color foregroundColor, Color backgroundColor)
+        {
+            var list = new List<DrawCommand>(str.Length);
+            for (var i = 0; i < str.Length; i++)
+            {
+                var newX = x + i;
+                list.Add(new DrawCommand(newX, y, str[i], foregroundColor, backgroundColor));
+            }
+            return list;
         }
 
         public DrawCommand TranslatedClone(int dx, int dy)
