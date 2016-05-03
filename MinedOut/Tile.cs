@@ -12,6 +12,7 @@ namespace MinedOut
         protected readonly Color GroundColor = new Color(0xC0, 0xC0, 0xC0);
         protected int X { get; }
         protected int Y { get; }
+        public bool Flagged { get; set; }
 
         protected Tile(int x, int y)
         {
@@ -30,7 +31,8 @@ namespace MinedOut
 
         public override void Draw(DrawCommandCollection drawCmds)
         {
-            var drawCmd = new DrawCommand(X, Y, ' ', Color.Red, GroundColor);
+            var ch = Flagged ? '\xd5' : ' ';
+            var drawCmd = new DrawCommand(X, Y, ch, Color.Red, GroundColor);
             drawCmds.Add(drawCmd);
         }
     }
@@ -43,7 +45,8 @@ namespace MinedOut
 
         public override void Draw(DrawCommandCollection drawCmds)
         {
-            var drawCmd = new DrawCommand(X, Y, '*', Color.Red, GroundColor);
+            var ch = Flagged ? '\xd5' : '*';
+            var drawCmd = new DrawCommand(X, Y, ch, Color.Red, GroundColor);
             drawCmds.Add(drawCmd);
         }
     }

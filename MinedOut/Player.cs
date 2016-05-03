@@ -26,6 +26,7 @@ namespace MinedOut
         public void Update()
         {
             UpdatePosition();
+            PlaceFlags();
 
             if (BombAtPos)
             {
@@ -36,6 +37,26 @@ namespace MinedOut
             {
                 scene.Win();
             }
+        }
+
+        private void PlaceFlags()
+        {
+            if (Controls.FlagUp)
+                ToggleFlagAt(X, Y - 1);
+            if (Controls.FlagDn)
+                ToggleFlagAt(X, Y + 1);
+            if (Controls.FlagLf)
+                ToggleFlagAt(X - 1, Y);
+            if (Controls.FlagRt)
+                ToggleFlagAt(X + 1, Y);
+        }
+
+        private void ToggleFlagAt(int x, int y)
+        {
+            if (!scene.Minefield.IsInRange(x, y))
+                return;
+            var tile = scene.Minefield.GetTile(x, y);
+            tile.Flagged = !tile.Flagged;
         }
 
         private void UpdatePosition()
