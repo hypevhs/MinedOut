@@ -57,7 +57,7 @@ namespace MinedOut
             buffer = new TextBuffer(TerminalW, TerminalH, new Texture("content/fontdos.png"), 9, 16);
 
             Minefield = new Minefield(this);
-            player = new HumanPlayer(this);
+            player = new AiPlayer(this);
         }
 
         public void Update()
