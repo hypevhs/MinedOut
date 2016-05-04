@@ -12,7 +12,7 @@ namespace MinedOut
         private readonly GameScene scene;
         public const int SizeX = 54;
         public const int SizeY = 19;
-        public const int NumMines = 150;
+        public const int NumMines = 125;
 
         private readonly Tile[,] tiles;
 
