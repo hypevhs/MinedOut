@@ -110,9 +110,9 @@ namespace MinedOut
         private void UpdateControls()
         {
             //get explore request, sorted by distance ascending
-            var exploreThese = explorePls.ToList().OrderBy(DistanceFromPlayer).ToList();
-            var canMoveToInOneStep = exploreThese.Where(MagnitudeFromPlayerIsOne);
-            var exploreHere = canMoveToInOneStep.First();
+            var exploreThese = explorePls.ToList().OrderBy(tile => tile.DistanceTo(plr.X, plr.Y)).ToList();
+            var hasDuggedPath = exploreThese.Where(MagnitudeFromPlayerIsOne);
+            var exploreHere = hasDuggedPath.First();
             explorePls.Remove(exploreHere);
             exploreThese.Remove(exploreHere);
 
@@ -127,15 +127,7 @@ namespace MinedOut
 
         private bool MagnitudeFromPlayerIsOne(Tile tile)
         {
-            return DistanceFromPlayer(tile) == 1;
-        }
-
-        private int DistanceFromPlayer(Tile tile)
-        {
-            //taxicab distance
-            return
-                Math.Abs(tile.X - plr.X) +
-                Math.Abs(tile.Y - plr.Y);
+            return tile.DistanceTo(plr.X, plr.Y) == 1;
         }
 
         private void UpdatePriorities()
