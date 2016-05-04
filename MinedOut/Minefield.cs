@@ -9,14 +9,16 @@ namespace MinedOut
 {
     internal class Minefield : IGameDrawable
     {
+        private readonly GameScene scene;
         public const int SizeX = 54;
         public const int SizeY = 19;
         public const int NumMines = 200;
 
         private readonly Tile[,] tiles;
 
-        public Minefield()
+        public Minefield(GameScene scene)
         {
+            this.scene = scene;
             tiles = new Tile[SizeX, SizeY];
 
             for (var y = 0; y < SizeY; y++)
@@ -73,6 +75,15 @@ namespace MinedOut
                     tile.Draw(drawCmds);
                 }
             }
+
+            DrawExit(drawCmds);
+        }
+
+        private void DrawExit(DrawCommandCollection drawCmds)
+        {
+            var animation = @"-\|/";
+            var drawnChar = animation[scene.FrameCounter/6 % animation.Length];
+            drawCmds.Add(new DrawCommand(SizeX - 1, SizeY - 1, drawnChar, Color.Yellow, Color.Transparent));
         }
 
         public bool IsInRange(int x, int y)

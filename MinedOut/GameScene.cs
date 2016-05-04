@@ -24,12 +24,13 @@ namespace MinedOut
         private readonly Player player;
         public bool IsWin { get; set; }
         public bool IsLose { get; set; }
+        public int FrameCounter { get; private set; }
 
         public GameScene()
         {
             buffer = new TextBuffer(TerminalW, TerminalH, new Texture("content/fontdos.png"), 9, 16);
 
-            Minefield = new Minefield();
+            Minefield = new Minefield(this);
             player = new Player(this);
         }
 
@@ -40,6 +41,7 @@ namespace MinedOut
             {
                 player.Update();
             }
+            FrameCounter++;
         }
 
         public void Draw(RenderTarget target, RenderStates states)
