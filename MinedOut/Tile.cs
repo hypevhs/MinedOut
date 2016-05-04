@@ -11,8 +11,8 @@ namespace MinedOut
     {
         protected readonly Color GroundColor = new Color(0xC0, 0xC0, 0xC0);
         protected readonly Color DugGroundColor = new Color(0x55, 0x55, 0x55);
-        protected int X { get; }
-        protected int Y { get; }
+        public int X { get; }
+        public int Y { get; }
         public bool Flagged { get; set; }
         public bool Dug { get; set; }
 

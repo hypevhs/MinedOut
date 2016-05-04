@@ -4,37 +4,37 @@ namespace MinedOut
 {
     internal static class Controls
     {
-        public static bool MoveUp => CurrMoveUp && !LastMoveUp && !CurrFlag;
-        public static bool MoveDn => CurrMoveDn && !LastMoveDn && !CurrFlag;
-        public static bool MoveLf => CurrMoveLf && !LastMoveLf && !CurrFlag;
-        public static bool MoveRt => CurrMoveRt && !LastMoveRt && !CurrFlag;
-        public static bool FlagUp => CurrMoveUp && !LastMoveUp && CurrFlag;
-        public static bool FlagDn => CurrMoveDn && !LastMoveDn && CurrFlag;
-        public static bool FlagLf => CurrMoveLf && !LastMoveLf && CurrFlag;
-        public static bool FlagRt => CurrMoveRt && !LastMoveRt && CurrFlag;
+        public static bool MoveUp => currMoveUp && !lastMoveUp && !currFlag;
+        public static bool MoveDn => currMoveDn && !lastMoveDn && !currFlag;
+        public static bool MoveLf => currMoveLf && !lastMoveLf && !currFlag;
+        public static bool MoveRt => currMoveRt && !lastMoveRt && !currFlag;
+        public static bool FlagUp => currMoveUp && !lastMoveUp && currFlag;
+        public static bool FlagDn => currMoveDn && !lastMoveDn && currFlag;
+        public static bool FlagLf => currMoveLf && !lastMoveLf && currFlag;
+        public static bool FlagRt => currMoveRt && !lastMoveRt && currFlag;
 
-        private static bool LastMoveUp { get; set; }
-        private static bool LastMoveDn { get; set; }
-        private static bool LastMoveLf { get; set; }
-        private static bool LastMoveRt { get; set; }
-        private static bool CurrMoveUp { get; set; }
-        private static bool CurrMoveDn { get; set; }
-        private static bool CurrMoveLf { get; set; }
-        private static bool CurrMoveRt { get; set; }
-        private static bool CurrFlag { get; set; }
+        private static bool lastMoveUp;
+        private static bool lastMoveDn;
+        private static bool lastMoveLf;
+        private static bool lastMoveRt;
+        private static bool currMoveUp;
+        private static bool currMoveDn;
+        private static bool currMoveLf;
+        private static bool currMoveRt;
+        private static bool currFlag;
 
         public static void Update()
         {
-            LastMoveUp = CurrMoveUp;
-            LastMoveDn = CurrMoveDn;
-            LastMoveLf = CurrMoveLf;
-            LastMoveRt = CurrMoveRt;
+            lastMoveUp = currMoveUp;
+            lastMoveDn = currMoveDn;
+            lastMoveLf = currMoveLf;
+            lastMoveRt = currMoveRt;
 
-            CurrMoveUp = Keyboard.IsKeyPressed(Keyboard.Key.Up);
-            CurrMoveDn = Keyboard.IsKeyPressed(Keyboard.Key.Down);
-            CurrMoveLf = Keyboard.IsKeyPressed(Keyboard.Key.Left);
-            CurrMoveRt = Keyboard.IsKeyPressed(Keyboard.Key.Right);
-            CurrFlag = Keyboard.IsKeyPressed(Keyboard.Key.LShift) || Keyboard.IsKeyPressed(Keyboard.Key.RShift);
+            currMoveUp = Keyboard.IsKeyPressed(Keyboard.Key.Up);
+            currMoveDn = Keyboard.IsKeyPressed(Keyboard.Key.Down);
+            currMoveLf = Keyboard.IsKeyPressed(Keyboard.Key.Left);
+            currMoveRt = Keyboard.IsKeyPressed(Keyboard.Key.Right);
+            currFlag = Keyboard.IsKeyPressed(Keyboard.Key.LShift) || Keyboard.IsKeyPressed(Keyboard.Key.RShift);
         }
     }
 }
