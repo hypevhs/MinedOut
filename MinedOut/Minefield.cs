@@ -116,6 +116,11 @@ namespace MinedOut
             return list;
         }
 
+        public IEnumerable<Tile> GetCardinalAdjacent(int x, int y)
+        {
+            return GetAdjacent(x, y).Where(t => t.DistanceTo(x, y) == 1);
+        }
+
         public void SetDrawMines(bool draw)
         {
             for (var y = 0; y < SizeY; y++)

@@ -111,7 +111,7 @@ namespace MinedOut
         {
             //get explore request, sorted by distance ascending
             var exploreThese = explorePls.ToList().OrderBy(tile => tile.DistanceTo(plr.X, plr.Y)).ToList();
-            var hasDuggedPath = exploreThese.Where(MagnitudeFromPlayerIsOne);
+            var hasDuggedPath = exploreThese.Where(HasDuggedPath).Where(MagnitudeFromPlayerIsOne);
             var exploreHere = hasDuggedPath.First();
             explorePls.Remove(exploreHere);
             exploreThese.Remove(exploreHere);
@@ -123,6 +123,12 @@ namespace MinedOut
             if (moveMeX ==-1) MoveLf = true;
             if (moveMeY == 1) MoveDn = true;
             if (moveMeY ==-1) MoveUp = true;
+        }
+
+        private bool HasDuggedPath(Tile targetTile)
+        {
+            var surrounding = field.GetCardinalAdjacent(targetTile.X, targetTile.Y);
+            return surrounding.Any(t => t.Dug);
         }
 
         private bool MagnitudeFromPlayerIsOne(Tile tile)
