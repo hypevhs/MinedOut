@@ -122,22 +122,31 @@ namespace MinedOut
 
         private void DrawGate(DrawCommandCollection drawCmds)
         {
-            const char bChar = (char)0xC5;
-            var bForeColor = gateColor;
-            var bBackColor = groundColor;
+            const char teeChar = '\xC5';
+            const char vertChar = '\xBA';
+            const char horiChar = '\xCD';
+            const char topRightChar = '\xBB';
+            const char botLeftChar = '\xC8';
 
-            for (var y = 0; y < GateHeight; y++)
+            for (var y = 1; y < GateHeight - 1; y++)
             {
-                for (var x = 0; x < GateWidth; x++)
-                {
-                    if (x + y >= GateHeight+GateWidth-3 || x + y < 2)
-                    {
-                        continue;
-                    }
-                    var gate = new DrawCommand(x, y, bChar, bForeColor, bBackColor);
-                    drawCmds.Add(gate);
-                }
+                if (y > 1)
+                    drawCmds.Add(new DrawCommand(0, y, vertChar, gateColor, Color.Transparent));
+                if (y < GateHeight - 2)
+                    drawCmds.Add(new DrawCommand(GateWidth - 1, y, vertChar, gateColor, Color.Transparent));
             }
+
+            for (var x = 1; x < GateWidth - 1; x++)
+            {
+                if (x > 1)
+                    drawCmds.Add(new DrawCommand(x, 0, horiChar, gateColor, Color.Transparent));
+                if (x < GateWidth - 2)
+                    drawCmds.Add(new DrawCommand(x, GateHeight - 1, horiChar, gateColor, Color.Transparent));
+            }
+
+            //draw topright and bottomleft
+            drawCmds.Add(new DrawCommand(GateWidth - 1, 0, topRightChar, gateColor, Color.Transparent));
+            drawCmds.Add(new DrawCommand(0, GateHeight - 1, botLeftChar, gateColor, Color.Transparent));
         }
 
         private void DrawBorder(DrawCommandCollection drawCmds)
