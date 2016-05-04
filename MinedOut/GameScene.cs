@@ -24,6 +24,11 @@ namespace MinedOut
         private readonly Player player;
         public bool IsWin { get; set; }
         public bool IsLose { get; set; }
+        public Color RandomColor => new Color(
+            (byte)RandomProvider.Random.Next(256),
+            (byte)RandomProvider.Random.Next(256),
+            (byte)RandomProvider.Random.Next(256)
+        );
         public int FrameCounter { get; private set; }
 
         public GameScene()
@@ -101,12 +106,6 @@ namespace MinedOut
             drawCmds.AddRange(DrawCommand.FromString(1, 18, " Shift \x18\x19\x1A\x1B", Color.Black, menuBackColorA));
             drawCmds.AddRange(DrawCommand.FromString(13, 18, "Flag", Color.White, menuColor));
         }
-
-        public Color RandomColor => new Color(
-            (byte)RandomProvider.Random.Next(256),
-            (byte)RandomProvider.Random.Next(256),
-            (byte)RandomProvider.Random.Next(256)
-        );
 
         private void DrawGround(DrawCommandCollection drawCmds)
         {
