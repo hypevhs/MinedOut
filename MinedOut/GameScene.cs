@@ -95,7 +95,7 @@ namespace MinedOut
 
         private void DrawMineDetector(DrawCommandCollection drawCmds)
         {
-            var mineCount = Minefield.GetAdjacentMines(player.X, player.Y);
+            var mineCount = Minefield.GetAdjacentMineCount(player.X, player.Y);
             if (mineCount > 0)
             {
                 var str = $"{mineCount} MINES ADJACENT";

@@ -92,9 +92,14 @@ namespace MinedOut
                 && y >= 0 && y < SizeY;
         }
 
-        public int GetAdjacentMines(int x, int y)
+        public int GetAdjacentMineCount(int x, int y)
         {
-            var count = 0;
+            return GetAdjacent(x, y).Count(t => t is MineTile);
+        }
+
+        public IEnumerable<Tile> GetAdjacent(int x, int y)
+        {
+            var list = new List<Tile>();
             for (var dy = -1; dy <= 1; dy++)
             {
                 for (var dx = -1; dx <= 1; dx++)
@@ -105,11 +110,10 @@ namespace MinedOut
                     var thisY = y + dy;
                     if (!IsInRange(thisX, thisY))
                         continue;
-                    if (tiles[thisX, thisY] is MineTile)
-                        count++;
+                    list.Add(tiles[thisX, thisY]);
                 }
             }
-            return count;
+            return list;
         }
 
         public void SetDrawMines(bool draw)
