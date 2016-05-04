@@ -25,7 +25,7 @@ namespace MinedOut
             {
                 for (var x = 0; x < SizeX; x++)
                 {
-                    tiles[x, y] = new GroundTile(x, y);
+                    tiles[x, y] = new GroundTile(x, y, scene);
                 }
             }
 
@@ -56,7 +56,7 @@ namespace MinedOut
             }
 
             //place mine
-            tiles[x, y] = new MineTile(x, y);
+            tiles[x, y] = new MineTile(x, y, scene);
         }
 
         public Tile GetTile(int x, int y)
