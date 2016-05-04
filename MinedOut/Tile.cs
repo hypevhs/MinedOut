@@ -47,6 +47,14 @@ namespace MinedOut
         {
             return $"Tile: {X}, {Y}";
         }
+
+        public int DistanceTo(int x, int y)
+        {
+            //taxicab distance
+            return
+                Math.Abs(X - x) +
+                Math.Abs(Y - y);
+        }
     }
 
     internal class GroundTile : Tile
