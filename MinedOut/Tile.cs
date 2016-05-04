@@ -42,6 +42,11 @@ namespace MinedOut
         }
 
         public abstract void Draw(DrawCommandCollection drawCmds);
+
+        public override string ToString()
+        {
+            return $"Tile: {X}, {Y}";
+        }
     }
 
     internal class GroundTile : Tile
