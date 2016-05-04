@@ -111,7 +111,7 @@ namespace MinedOut
     {
         public AiPlayer(GameScene scene) : base(scene)
         {
-            controls = new AiControls(this);
+            controls = new AiControls(this, scene.Minefield);
         }
     }
 }

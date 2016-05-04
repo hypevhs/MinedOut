@@ -57,6 +57,7 @@ namespace MinedOut
     internal class AiControls : IControls
     {
         private readonly AiPlayer plr;
+        private readonly Minefield field;
         public bool MoveUp { get; }
         public bool MoveDn { get; }
         public bool MoveLf { get; }
@@ -66,9 +67,10 @@ namespace MinedOut
         public bool FlagLf { get; }
         public bool FlagRt { get; }
 
-        public AiControls(AiPlayer plr)
+        public AiControls(AiPlayer plr, Minefield field)
         {
             this.plr = plr;
+            this.field = field;
         }
 
         public void Update()
