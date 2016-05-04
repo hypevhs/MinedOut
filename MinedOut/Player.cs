@@ -97,6 +97,13 @@ namespace MinedOut
         {
             var drawCmd = new DrawCommand(X, Y, '\x02', playerColor, Color.Transparent);
             drawCmds.Add(drawCmd);
+
+            var ai = this as AiPlayer;
+            if (ai != null)
+            {
+                var ctrls = ai.controls as AiControls;
+                ctrls?.Draw(drawCmds);
+            }
         }
     }
 

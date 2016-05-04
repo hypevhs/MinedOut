@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
 
@@ -79,6 +80,7 @@ namespace MinedOut
 
         private bool lastAdvance;
         private bool currAdvance;
+        private bool oddFrame;
         public void Update()
         {
             //read something from plr and set the bools
@@ -90,9 +92,21 @@ namespace MinedOut
             ResetControls();
             if (currAdvance && !lastAdvance)
             {
-                UpdatePriorities();
-                UpdateControls();
+                oddFrame = !oddFrame;
+                if (oddFrame)
+                    UpdatePriorities();
+                else
+                    UpdateControls();
                 //exploreThese.Count should be 2 and then something else idk
+            }
+        }
+
+        public void Draw(DrawCommandCollection drawCmds)
+        {
+            //draw the lists for debug purposes
+            foreach (var expl in explorePls)
+            {
+                drawCmds.Add(new DrawCommand(expl.X, expl.Y, '#', Color.Yellow, Color.Transparent));
             }
         }
 
