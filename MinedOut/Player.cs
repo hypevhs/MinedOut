@@ -8,23 +8,25 @@ using SFML.Window;
 
 namespace MinedOut
 {
-    internal class Player : IGameDrawable
+    internal class PlayerBase : IGameDrawable
     {
-        private readonly GameScene scene;
+        private GameScene scene;
         public int X { get; set; }
         public int Y { get; set; }
 
         private bool AtExitPos => X == Minefield.SizeX - 1 && Y == Minefield.SizeY - 1;
         private bool BombAtPos => scene.Minefield.GetTile(X, Y) is MineTile;
         private readonly Color playerColor = Color.White;
+        protected IControls controls;
 
-        public Player(GameScene scene)
+        protected PlayerBase(GameScene scene)
         {
             this.scene = scene;
         }
 
         public void Update()
         {
+            controls.Update();
             UpdatePosition();
             MakeDigMark();
             PlaceFlags();
@@ -48,13 +50,13 @@ namespace MinedOut
 
         private void PlaceFlags()
         {
-            if (Controls.FlagUp)
+            if (controls.FlagUp)
                 ToggleFlagAt(X, Y - 1);
-            if (Controls.FlagDn)
+            if (controls.FlagDn)
                 ToggleFlagAt(X, Y + 1);
-            if (Controls.FlagLf)
+            if (controls.FlagLf)
                 ToggleFlagAt(X - 1, Y);
-            if (Controls.FlagRt)
+            if (controls.FlagRt)
                 ToggleFlagAt(X + 1, Y);
         }
 
@@ -71,10 +73,10 @@ namespace MinedOut
             //get next pos
             var nextPosX = X;
             var nextPosY = Y;
-            if (Controls.MoveLf || Controls.MoveRt) //prioritize LR in the event of a diagonal input
-                nextPosX += (Controls.MoveRt ? 1 : 0) + (Controls.MoveLf ? -1 : 0);
+            if (controls.MoveLf || controls.MoveRt) //prioritize LR in the event of a diagonal input
+                nextPosX += (controls.MoveRt ? 1 : 0) + (controls.MoveLf ? -1 : 0);
             else
-                nextPosY += (Controls.MoveDn ? 1 : 0) + (Controls.MoveUp ? -1 : 0);
+                nextPosY += (controls.MoveDn ? 1 : 0) + (controls.MoveUp ? -1 : 0);
 
             //move if no wall blocking our way
             if (CanWalk(nextPosX, nextPosY))
@@ -94,6 +96,22 @@ namespace MinedOut
         {
             var drawCmd = new DrawCommand(X, Y, '\x02', playerColor, Color.Transparent);
             drawCmds.Add(drawCmd);
+        }
+    }
+
+    internal class HumanPlayer : PlayerBase
+    {
+        public HumanPlayer(GameScene scene) : base(scene)
+        {
+            controls = new HumanControls();
+        }
+    }
+
+    internal class AiPlayer : PlayerBase
+    {
+        public AiPlayer(GameScene scene) : base(scene)
+        {
+            controls = new AiControls(this);
         }
     }
 }

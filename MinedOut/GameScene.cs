@@ -21,7 +21,7 @@ namespace MinedOut
         private readonly Color menuBackColorB = new Color(0x00, 0xA8, 0xA8);
         public Minefield Minefield { get; }
         private readonly TextBuffer buffer;
-        private readonly Player player;
+        private readonly PlayerBase player;
         private bool isWin;
         private bool isLose;
 
@@ -57,12 +57,11 @@ namespace MinedOut
             buffer = new TextBuffer(TerminalW, TerminalH, new Texture("content/fontdos.png"), 9, 16);
 
             Minefield = new Minefield(this);
-            player = new Player(this);
+            player = new HumanPlayer(this);
         }
 
         public void Update()
         {
-            Controls.Update();
             if (!IsWin && !IsLose)
             {
                 player.Update();
