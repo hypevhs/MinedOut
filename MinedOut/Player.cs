@@ -22,6 +22,7 @@ namespace MinedOut
         protected PlayerBase(GameScene scene)
         {
             this.scene = scene;
+            MakeDigMark();
         }
 
         public void Update()
