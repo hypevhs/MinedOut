@@ -11,6 +11,22 @@ namespace MinedOut
     {
         protected readonly Color GroundColor = new Color(0xC0, 0xC0, 0xC0);
         protected readonly Color DugGroundColor = new Color(0x55, 0x55, 0x55);
+        protected Color BackgroundColor
+        {
+            get
+            {
+                var col = Dug ? DugGroundColor : GroundColor;
+                if ((X + Y) % 2 == 0)
+                {
+                    col = new Color(
+                        (byte)(col.R * .95f),
+                        (byte)(col.G * .95f),
+                        (byte)(col.B * .95f)
+                    );
+                }
+                return col;
+            }
+        }
         public int X { get; }
         public int Y { get; }
         protected GameScene Scene { get; }
@@ -37,7 +53,7 @@ namespace MinedOut
         public override void Draw(DrawCommandCollection drawCmds)
         {
             var ch = Flagged ? '\xd5' : ' ';
-            var drawCmd = new DrawCommand(X, Y, ch, Color.Red, Dug ? DugGroundColor : GroundColor);
+            var drawCmd = new DrawCommand(X, Y, ch, Color.Red, BackgroundColor);
             drawCmds.Add(drawCmd);
         }
     }
@@ -64,7 +80,7 @@ namespace MinedOut
                 ch = '*';
             }
             
-            var drawCmd = new DrawCommand(X, Y, ch, Color.Red, Dug ? DugGroundColor : GroundColor);
+            var drawCmd = new DrawCommand(X, Y, ch, Color.Red, BackgroundColor);
             drawCmds.Add(drawCmd);
         }
     }
