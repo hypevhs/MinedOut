@@ -16,6 +16,7 @@ namespace MinedOut
         protected GameScene Scene { get; }
         public bool Flagged { get; set; }
         public bool Dug { get; set; }
+        public bool DrawMines { get; set; }
 
         protected Tile(int x, int y, GameScene scene)
         {
@@ -49,7 +50,20 @@ namespace MinedOut
 
         public override void Draw(DrawCommandCollection drawCmds)
         {
-            var ch = Flagged ? '\xd5' : '*';
+            var animate = Scene.FrameCounter / 20 % 2 == 0;
+
+            char ch = ' ';
+            if (Flagged)
+            {
+                ch = '\xd5';
+                if (DrawMines && animate)
+                    ch = '*';
+            }
+            else if (DrawMines)
+            {
+                ch = '*';
+            }
+            
             var drawCmd = new DrawCommand(X, Y, ch, Color.Red, Dug ? DugGroundColor : GroundColor);
             drawCmds.Add(drawCmd);
         }

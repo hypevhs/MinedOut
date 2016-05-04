@@ -22,8 +22,29 @@ namespace MinedOut
         public Minefield Minefield { get; }
         private readonly TextBuffer buffer;
         private readonly Player player;
-        public bool IsWin { get; set; }
-        public bool IsLose { get; set; }
+        private bool isWin;
+        private bool isLose;
+
+        public bool IsWin
+        {
+            get { return isWin; }
+            set
+            {
+                isWin = value;
+                Minefield.SetDrawMines(true);
+            }
+        }
+
+        public bool IsLose
+        {
+            get { return isLose; }
+            set
+            {
+                isLose = value;
+                Minefield.SetDrawMines(true);
+            }
+        }
+
         public Color RandomColor => new Color(
             (byte)RandomProvider.Random.Next(256),
             (byte)RandomProvider.Random.Next(256),

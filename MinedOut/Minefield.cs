@@ -111,5 +111,16 @@ namespace MinedOut
             }
             return count;
         }
+
+        public void SetDrawMines(bool draw)
+        {
+            for (var y = 0; y < SizeY; y++)
+            {
+                for (var x = 0; x < SizeX; x++)
+                {
+                    tiles[x, y].DrawMines = true;
+                }
+            }
+        }
     }
 }
