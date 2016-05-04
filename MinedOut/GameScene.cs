@@ -122,7 +122,6 @@ namespace MinedOut
 
         private void DrawGate(DrawCommandCollection drawCmds)
         {
-            const char teeChar = '\xC5';
             const char vertChar = '\xBA';
             const char horiChar = '\xCD';
             const char topRightChar = '\xBB';
