@@ -59,7 +59,6 @@ namespace MinedOut
     {
         private readonly AiPlayer plr;
         private readonly Minefield field;
-        private readonly int?[,] mineCounterMatrix;
         private HashSet<Tile> explorePls;
         public bool MoveUp { get; private set; }
         public bool MoveDn { get; private set; }
@@ -74,7 +73,6 @@ namespace MinedOut
         {
             this.plr = plr;
             this.field = field;
-            mineCounterMatrix = new int?[Minefield.SizeX, Minefield.SizeY];
             explorePls = new HashSet<Tile>();
         }
 
@@ -143,11 +141,9 @@ namespace MinedOut
         private void UpdatePriorities()
         {
             //save current count to MCM
-            mineCounterMatrix[plr.X, plr.Y] = GetAdjMineCount(plr.X, plr.Y);
-
             var mcmWhereX = plr.X;
             var mcmWhereY = plr.Y;
-            int? mcmHere = mineCounterMatrix[mcmWhereX, mcmWhereY].Value;
+            int mcmHere = GetAdjMineCount(mcmWhereX, mcmWhereY);
 
             //if the counter is 0, explore all unexplored neighbors
             if (mcmHere == 0)
