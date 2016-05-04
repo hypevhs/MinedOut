@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SFML.System;
 using SFML.Window;
 
 namespace MinedOut
@@ -111,18 +112,40 @@ namespace MinedOut
         {
             //get explore request, sorted by distance ascending
             var exploreThese = explorePls.ToList().OrderBy(tile => tile.DistanceTo(plr.X, plr.Y)).ToList();
-            var hasDuggedPath = exploreThese.Where(HasDuggedPath).Where(MagnitudeFromPlayerIsOne);
+            var hasDuggedPath = exploreThese.Where(HasDuggedPath);
             var exploreHere = hasDuggedPath.First();
-            explorePls.Remove(exploreHere);
-            exploreThese.Remove(exploreHere);
 
-            var moveMeX = exploreHere.X - plr.X;
-            var moveMeY = exploreHere.Y - plr.Y;
+            var nextStep = NextStepInMovingTowards(exploreHere);
 
-            if (moveMeX == 1) MoveRt = true;
-            if (moveMeX ==-1) MoveLf = true;
-            if (moveMeY == 1) MoveDn = true;
-            if (moveMeY ==-1) MoveUp = true;
+            if (MagnitudeFromPlayerIsOne(exploreHere))
+            {
+                explorePls.Remove(exploreHere);
+                exploreThese.Remove(exploreHere);
+            }
+            else
+            {
+                FlagUp = true;
+                FlagDn = true;
+                FlagLf = true;
+                FlagRt = true;
+            }
+
+            var diffX = nextStep.X - plr.X;
+            var diffY = nextStep.Y - plr.Y;
+            if (diffX == 1)  MoveRt = true;
+            if (diffX == -1) MoveLf = true;
+            if (diffY == 1)  MoveDn = true;
+            if (diffY == -1) MoveUp = true;
+        }
+
+        private Vector2i NextStepInMovingTowards(Tile exploreHere)
+        {
+            //cardinal ONLY
+            if (MagnitudeFromPlayerIsOne(exploreHere))
+            {
+                return new Vector2i(exploreHere.X, exploreHere.Y);
+            }
+            return new Vector2i(0, 0);
         }
 
         private bool HasDuggedPath(Tile targetTile)
