@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SFML.Graphics;
 using SFML.System;
@@ -81,6 +80,7 @@ namespace MinedOut
         private bool lastAdvance;
         private bool currAdvance;
         private bool oddFrame;
+
         public void Update()
         {
             //read something from plr and set the bools
@@ -97,7 +97,6 @@ namespace MinedOut
                     UpdatePriorities();
                 else
                     UpdateControls();
-                //exploreThese.Count should be 2 and then something else idk
             }
         }
 
