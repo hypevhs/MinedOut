@@ -131,5 +131,16 @@ namespace MinedOut
                 }
             }
         }
+
+        public IEnumerable<Tile> GetAllTiles()
+        {
+            for (var y = 0; y < SizeY; y++)
+            {
+                for (var x = 0; x < SizeX; x++)
+                {
+                    yield return tiles[x, y];
+                }
+            }
+        }
     }
 }

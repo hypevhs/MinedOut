@@ -124,12 +124,24 @@ namespace MinedOut
         private void UpdateControls()
         {
             var exploreTarget = GetExploreTarget();
+            if (exploreTarget == null)
+            {
+                //meaning: no more tiles to check.
+                FlagRt = true;
+                return;
+            }
+
+            MoveTowardTarget(exploreTarget);
+        }
+
+        private void MoveTowardTarget(Tile exploreTarget)
+        {
             var nextStep = NextStepInMovingTowards(exploreTarget);
 
             //can reach our target in one step? remove it from todolist, then move to it
-            if (MagnitudeFromPlayerIsOne(exploreTarget))
+            var tileTmp = new GroundTile(nextStep.X, nextStep.Y);
+            if (tileTmp.DistanceTo(plr.X, plr.Y) == 1)
             {
-                explorePls.Remove(exploreTarget);
                 var diffX = nextStep.X - plr.X;
                 var diffY = nextStep.Y - plr.Y;
                 if (diffX == 1) MoveRt = true;
@@ -137,12 +149,10 @@ namespace MinedOut
                 if (diffY == 1) MoveDn = true;
                 if (diffY == -1) MoveUp = true;
             }
-            else //signal for help
+            else
             {
-                FlagUp = true;
+                //meaning: the distance is not 1 so it's a pathfinding error probably
                 FlagDn = true;
-                FlagLf = true;
-                FlagRt = true;
             }
         }
 
@@ -151,18 +161,72 @@ namespace MinedOut
             //get explore request, sorted by distance ascending
             var hasADuggedPathToIt = explorePls.Where(HasDuggedPath).ToList();
             var sortedExplore = hasADuggedPathToIt.OrderBy(tile => tile.DistanceTo(plr.X, plr.Y)).ToList();
-            var topPriority = sortedExplore.First();
+            var topPriority = sortedExplore.FirstOrDefault();
             return topPriority;
         }
 
         private Vector2i NextStepInMovingTowards(Tile exploreHere)
         {
+            IEnumerable<DijkstraVertex> path = Dijkstra(new Vector2i(exploreHere.X, exploreHere.Y));
+            return path.First().ToVector2i();
+
+            /*
             //cardinal ONLY
             if (MagnitudeFromPlayerIsOne(exploreHere))
             {
                 return new Vector2i(exploreHere.X, exploreHere.Y);
             }
             return new Vector2i(0, 0);
+            */
+        }
+
+        private IEnumerable<DijkstraVertex> Dijkstra(Vector2i targetPos)
+        {
+            DijkstraVertex target = new DijkstraVertex(targetPos.X, targetPos.Y);
+
+            IEnumerable<DijkstraVertex> allDug = PositionsOfAllDuggedTiles().Select(t => new DijkstraVertex(t.X, t.Y));
+            var graphAsList = allDug.Concat(new List<DijkstraVertex> { target });
+            IEnumerable<DijkstraVertex> graph = new List<DijkstraVertex>(graphAsList);
+
+            DijkstraVertex source = graph.First(v => v.X == plr.X && v.Y == plr.Y);
+
+            foreach (DijkstraVertex v in graph)
+            {
+                v.Dist = 99999;
+                v.Previous = null;
+            }
+            source.Dist = 0;
+            var Q = new List<DijkstraVertex>(graph.ToList());
+            while (Q.Count != 0)
+            {
+                DijkstraVertex u = Q.OrderBy(t => t.Dist).First();
+                Q.Remove(u);
+                IEnumerable<DijkstraVertex> vs = GetNeighbors(graph, u);
+                foreach (DijkstraVertex v in vs)
+                {
+                    int alt = u.Dist + u.DistanceTo(v);
+                    if (alt < v.Dist)
+                    {
+                        v.Dist = alt;
+                        v.Previous = u;
+                    }
+                }
+            }
+
+            var path = target.GetPathFromSource();
+            return path;
+        }
+
+        private IEnumerable<DijkstraVertex> GetNeighbors(IEnumerable<DijkstraVertex> graph, DijkstraVertex dijkstraVertex)
+        {
+            return graph.Where(t => t.DistanceTo(dijkstraVertex) == 1);
+        }
+
+        private IEnumerable<Vector2i> PositionsOfAllDuggedTiles()
+        {
+            var allDugTiles = field.GetAllTiles().Where(t => t.Dug);
+            var positions = allDugTiles.Select(t => new Vector2i(t.X, t.Y));
+            return positions;
         }
 
         private bool HasDuggedPath(Tile targetTile)
@@ -171,13 +235,14 @@ namespace MinedOut
             return surrounding.Any(t => t.Dug);
         }
 
-        private bool MagnitudeFromPlayerIsOne(Tile tile)
-        {
-            return tile.DistanceTo(plr.X, plr.Y) == 1;
-        }
-
         private void UpdatePriorities()
         {
+            //if we're on an explore candidate, remove it from the todolist
+            explorePls.RemoveWhere(t =>
+                t.X == plr.X &&
+                t.Y == plr.Y
+            );
+
             //save current count to MCM
             var mcmWhereX = plr.X;
             var mcmWhereY = plr.Y;

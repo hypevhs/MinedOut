@@ -88,6 +88,7 @@
     <Compile Include="Controls.cs" />
     <Compile Include="Drawing.cs" />
     <Compile Include="Minefield.cs" />
+    <Compile Include="Pathfinding.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
