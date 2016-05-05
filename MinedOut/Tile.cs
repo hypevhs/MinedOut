@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
+using SFML.System;
 
 namespace MinedOut
 {
@@ -46,12 +47,22 @@ namespace MinedOut
             return $"Tile: {X}, {Y}";
         }
 
+        public int DistanceTo(Tile other)
+        {
+            return DistanceTo(other.X, other.Y);
+        }
+
         public int DistanceTo(int x, int y)
         {
             //taxicab distance
             return
                 Math.Abs(X - x) +
                 Math.Abs(Y - y);
+        }
+
+        public Vector2i ToVector2i()
+        {
+            return new Vector2i(X, Y);
         }
     }
 

@@ -231,7 +231,7 @@ namespace MinedOut
 
         private bool HasDuggedPath(Tile targetTile)
         {
-            var surrounding = field.GetCardinalAdjacent(targetTile.X, targetTile.Y);
+            var surrounding = field.GetCardinalAdjacent(targetTile);
             return surrounding.Any(t => t.Dug);
         }
 

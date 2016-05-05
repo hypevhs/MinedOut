@@ -7,22 +7,18 @@ using SFML.System;
 
 namespace MinedOut
 {
-    internal class DijkstraVertex
+    internal class DijkstraVertex : Tile
     {
-        public override string ToString()
+        public override void Draw(DrawCommandCollection drawCmds)
         {
-            return $"DijkVtx: {X},{Y}";
+            throw new NotImplementedException();
         }
-
-        public int X { get; }
-        public int Y { get; }
+        
         public DijkstraVertex Previous { get; set; }
         public int Dist { get; set; }
 
-        public DijkstraVertex(int x, int y)
+        public DijkstraVertex(int x, int y) : base(x, y)
         {
-            X = x;
-            Y = y;
         }
 
         public List<DijkstraVertex> GetPathFromSource()
@@ -38,17 +34,9 @@ namespace MinedOut
             return pathSoFar;
         }
 
-        public int DistanceTo(DijkstraVertex dijkstraVertex)
+        public override string ToString()
         {
-            //taxicab distance
-            return
-                Math.Abs(X - dijkstraVertex.X) +
-                Math.Abs(Y - dijkstraVertex.Y);
-        }
-            
-        public Vector2i ToVector2i()
-        {
-            return new Vector2i(X, Y);
+            return $"DijkVtx: {X},{Y}";
         }
     }
 }
