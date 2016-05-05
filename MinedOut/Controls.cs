@@ -86,7 +86,7 @@ namespace MinedOut
             //read something from plr and set the bools
             //ai phase 1: travel where mine counter is 0
 
-            lastAdvance = currAdvance;
+            //lastAdvance = currAdvance;
             currAdvance = Keyboard.IsKeyPressed(Keyboard.Key.A);
 
             ResetControls();
