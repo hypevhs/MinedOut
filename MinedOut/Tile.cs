@@ -29,16 +29,14 @@ namespace MinedOut
         }
         public int X { get; }
         public int Y { get; }
-        protected GameScene Scene { get; }
         public bool Flagged { get; set; }
         public bool Dug { get; set; }
         public bool DrawMines { get; set; }
 
-        protected Tile(int x, int y, GameScene scene)
+        protected Tile(int x, int y)
         {
             X = x;
             Y = y;
-            Scene = scene;
         }
 
         public abstract void Draw(DrawCommandCollection drawCmds);
@@ -59,7 +57,7 @@ namespace MinedOut
 
     internal class GroundTile : Tile
     {
-        public GroundTile(int x, int y, GameScene scene) : base(x, y, scene)
+        public GroundTile(int x, int y) : base(x, y)
         {
         }
 
@@ -73,8 +71,11 @@ namespace MinedOut
 
     internal class MineTile : Tile
     {
-        public MineTile(int x, int y, GameScene scene) : base(x, y, scene)
+        private GameScene Scene { get; }
+
+        public MineTile(int x, int y, GameScene scene) : base(x, y)
         {
+            Scene = scene;
         }
 
         public override void Draw(DrawCommandCollection drawCmds)

@@ -25,7 +25,7 @@ namespace MinedOut
             {
                 for (var x = 0; x < SizeX; x++)
                 {
-                    tiles[x, y] = new GroundTile(x, y, scene);
+                    tiles[x, y] = new GroundTile(x, y);
                 }
             }
 
