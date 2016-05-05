@@ -12,6 +12,8 @@ namespace MinedOut
         private const int WindowH = 25*16;
         private static RenderWindow window;
         private static GameScene gameScene;
+        private static bool currEsc;
+        private static bool lastEsc;
 
         private static void Main(string[] args)
         {
@@ -47,6 +49,14 @@ namespace MinedOut
         private static void UpdateDraw()
         {
             window.DispatchEvents();
+
+            lastEsc = currEsc;
+            currEsc = Keyboard.IsKeyPressed(Keyboard.Key.Escape);
+            if (currEsc && !lastEsc)
+            {
+                gameScene = new GameScene();
+            }
+
             gameScene.Update();
             window.Clear();
             window.Draw(gameScene);
