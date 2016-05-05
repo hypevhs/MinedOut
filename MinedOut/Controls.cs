@@ -124,32 +124,36 @@ namespace MinedOut
 
         private void UpdateControls()
         {
-            //get explore request, sorted by distance ascending
-            var exploreThese = explorePls.ToList().OrderBy(tile => tile.DistanceTo(plr.X, plr.Y)).ToList();
-            var hasDuggedPath = exploreThese.Where(HasDuggedPath);
-            var exploreHere = hasDuggedPath.First();
+            var exploreTarget = GetExploreTarget();
+            var nextStep = NextStepInMovingTowards(exploreTarget);
 
-            var nextStep = NextStepInMovingTowards(exploreHere);
-
-            if (MagnitudeFromPlayerIsOne(exploreHere))
+            //can reach our target in one step? remove it from todolist, then move to it
+            if (MagnitudeFromPlayerIsOne(exploreTarget))
             {
-                explorePls.Remove(exploreHere);
-                exploreThese.Remove(exploreHere);
+                explorePls.Remove(exploreTarget);
+                var diffX = nextStep.X - plr.X;
+                var diffY = nextStep.Y - plr.Y;
+                if (diffX == 1) MoveRt = true;
+                if (diffX == -1) MoveLf = true;
+                if (diffY == 1) MoveDn = true;
+                if (diffY == -1) MoveUp = true;
             }
-            else
+            else //signal for help
             {
                 FlagUp = true;
                 FlagDn = true;
                 FlagLf = true;
                 FlagRt = true;
             }
+        }
 
-            var diffX = nextStep.X - plr.X;
-            var diffY = nextStep.Y - plr.Y;
-            if (diffX == 1)  MoveRt = true;
-            if (diffX == -1) MoveLf = true;
-            if (diffY == 1)  MoveDn = true;
-            if (diffY == -1) MoveUp = true;
+        private Tile GetExploreTarget()
+        {
+            //get explore request, sorted by distance ascending
+            var hasADuggedPathToIt = explorePls.Where(HasDuggedPath).ToList();
+            var sortedExplore = hasADuggedPathToIt.OrderBy(tile => tile.DistanceTo(plr.X, plr.Y)).ToList();
+            var topPriority = sortedExplore.First();
+            return topPriority;
         }
 
         private Vector2i NextStepInMovingTowards(Tile exploreHere)
