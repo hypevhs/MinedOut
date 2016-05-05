@@ -60,7 +60,7 @@ namespace MinedOut
     {
         private readonly AiPlayer plr;
         private readonly Minefield field;
-        private HashSet<Tile> explorePls;
+        private HashSet<DrawableTile> explorePls;
         public bool MoveUp { get; private set; }
         public bool MoveDn { get; private set; }
         public bool MoveLf { get; private set; }
@@ -74,7 +74,7 @@ namespace MinedOut
         {
             this.plr = plr;
             this.field = field;
-            explorePls = new HashSet<Tile>();
+            explorePls = new HashSet<DrawableTile>();
         }
 
         private bool lastAdvance;
@@ -134,7 +134,7 @@ namespace MinedOut
             MoveTowardTarget(exploreTarget);
         }
 
-        private void MoveTowardTarget(Tile exploreTarget)
+        private void MoveTowardTarget(DrawableTile exploreTarget)
         {
             var nextStep = NextStepInMovingTowards(exploreTarget);
 
@@ -156,7 +156,7 @@ namespace MinedOut
             }
         }
 
-        private Tile GetExploreTarget()
+        private DrawableTile GetExploreTarget()
         {
             //get explore request, sorted by distance ascending
             var hasADuggedPathToIt = explorePls.Where(HasDuggedPath).ToList();
@@ -165,7 +165,7 @@ namespace MinedOut
             return topPriority;
         }
 
-        private Vector2i NextStepInMovingTowards(Tile exploreHere)
+        private Vector2i NextStepInMovingTowards(DrawableTile exploreHere)
         {
             IEnumerable<DijkstraVertex> path = Dijkstra(new Vector2i(exploreHere.X, exploreHere.Y));
             return path.First().ToVector2i();
@@ -229,9 +229,9 @@ namespace MinedOut
             return positions;
         }
 
-        private bool HasDuggedPath(Tile targetTile)
+        private bool HasDuggedPath(DrawableTile targetTile)
         {
-            var surrounding = field.GetCardinalAdjacent(targetTile);
+            var surrounding = field.GetCardinalAdjacent(targetTile.X, targetTile.Y);
             return surrounding.Any(t => t.Dug);
         }
 
@@ -256,12 +256,12 @@ namespace MinedOut
             }
         }
 
-        private void PleaseExplore(IEnumerable<Tile> where)
+        private void PleaseExplore(IEnumerable<DrawableTile> where)
         {
             explorePls.UnionWith(where);
         }
 
-        private IEnumerable<Tile> GetAdjUnexplored(int x, int y)
+        private IEnumerable<DrawableTile> GetAdjUnexplored(int x, int y)
         {
             var found = field.GetAdjacent(x, y).Where(t => t.Dug == false);
             return found;

@@ -9,11 +9,6 @@ namespace MinedOut
 {
     internal class DijkstraVertex : Tile
     {
-        public override void Draw(DrawCommandCollection drawCmds)
-        {
-            throw new NotImplementedException();
-        }
-        
         public DijkstraVertex Previous { get; set; }
         public int Dist { get; set; }
 

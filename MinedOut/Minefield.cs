@@ -14,12 +14,12 @@ namespace MinedOut
         public const int SizeY = 19;
         public const int NumMines = 125;
 
-        private readonly Tile[,] tiles;
+        private readonly DrawableTile[,] tiles;
 
         public Minefield(GameScene scene)
         {
             this.scene = scene;
-            tiles = new Tile[SizeX, SizeY];
+            tiles = new DrawableTile[SizeX, SizeY];
 
             for (var y = 0; y < SizeY; y++)
             {
@@ -59,7 +59,7 @@ namespace MinedOut
             tiles[x, y] = new MineTile(x, y, scene);
         }
 
-        public Tile GetTile(int x, int y)
+        public DrawableTile GetTile(int x, int y)
         {
             //TODO range check
             return tiles[x, y];
@@ -97,9 +97,9 @@ namespace MinedOut
             return GetAdjacent(x, y).Count(t => t is MineTile);
         }
 
-        public IEnumerable<Tile> GetAdjacent(int x, int y)
+        public IEnumerable<DrawableTile> GetAdjacent(int x, int y)
         {
-            var list = new List<Tile>();
+            var list = new List<DrawableTile>();
             for (var dy = -1; dy <= 1; dy++)
             {
                 for (var dx = -1; dx <= 1; dx++)
@@ -116,9 +116,9 @@ namespace MinedOut
             return list;
         }
 
-        public IEnumerable<Tile> GetCardinalAdjacent(Tile fromMe)
+        public IEnumerable<DrawableTile> GetCardinalAdjacent(int x, int y)
         {
-            return GetAdjacent(fromMe.X, fromMe.Y).Where(t => t.DistanceTo(fromMe.X, fromMe.Y) == 1);
+            return GetAdjacent(x, y).Where(t => t.DistanceTo(x, y) == 1);
         }
 
         public void SetDrawMines(bool draw)
@@ -127,12 +127,16 @@ namespace MinedOut
             {
                 for (var x = 0; x < SizeX; x++)
                 {
-                    tiles[x, y].DrawMines = true;
+                    var mineTile = tiles[x, y] as MineTile;
+                    if (mineTile != null)
+                    {
+                        mineTile.DrawMines = true;
+                    }
                 }
             }
         }
 
-        public IEnumerable<Tile> GetAllTiles()
+        public IEnumerable<DrawableTile> GetAllTiles()
         {
             for (var y = 0; y < SizeY; y++)
             {

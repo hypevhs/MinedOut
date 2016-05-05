@@ -8,39 +8,18 @@ using SFML.System;
 
 namespace MinedOut
 {
-    internal abstract class Tile : IGameDrawable
+    internal abstract class Tile
     {
-        protected readonly Color GroundColor = new Color(0xC0, 0xC0, 0xC0);
-        protected readonly Color DugGroundColor = new Color(0x55, 0x55, 0x55);
-        protected Color BackgroundColor
-        {
-            get
-            {
-                var col = Dug ? DugGroundColor : GroundColor;
-                if ((X + Y) % 2 == 0)
-                {
-                    col = new Color(
-                        (byte)(col.R * .95f),
-                        (byte)(col.G * .95f),
-                        (byte)(col.B * .95f)
-                    );
-                }
-                return col;
-            }
-        }
-        public int X { get; }
-        public int Y { get; }
-        public bool Flagged { get; set; }
-        public bool Dug { get; set; }
-        public bool DrawMines { get; set; }
-
         protected Tile(int x, int y)
         {
             X = x;
             Y = y;
         }
 
-        public abstract void Draw(DrawCommandCollection drawCmds);
+        public int X { get; }
+        public int Y { get; }
+        public bool Flagged { get; set; }
+        public bool Dug { get; set; }
 
         public override string ToString()
         {
@@ -66,7 +45,35 @@ namespace MinedOut
         }
     }
 
-    internal class GroundTile : Tile
+    internal abstract class DrawableTile : Tile, IGameDrawable
+    {
+        protected readonly Color GroundColor = new Color(0xC0, 0xC0, 0xC0);
+        protected readonly Color DugGroundColor = new Color(0x55, 0x55, 0x55);
+        protected Color BackgroundColor
+        {
+            get
+            {
+                var col = Dug ? DugGroundColor : GroundColor;
+                if ((X + Y) % 2 == 0)
+                {
+                    col = new Color(
+                        (byte)(col.R * .95f),
+                        (byte)(col.G * .95f),
+                        (byte)(col.B * .95f)
+                    );
+                }
+                return col;
+            }
+        }
+
+        protected DrawableTile(int x, int y) : base(x, y)
+        {
+        }
+
+        public abstract void Draw(DrawCommandCollection drawCmds);
+    }
+
+    internal class GroundTile : DrawableTile
     {
         public GroundTile(int x, int y) : base(x, y)
         {
@@ -80,8 +87,9 @@ namespace MinedOut
         }
     }
 
-    internal class MineTile : Tile
+    internal class MineTile : DrawableTile
     {
+        public bool DrawMines { get; set; }
         private GameScene Scene { get; }
 
         public MineTile(int x, int y, GameScene scene) : base(x, y)
