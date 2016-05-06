@@ -88,7 +88,10 @@ namespace MinedOut
         private DrawableTile GetAnExploreTarget()
         {
             //get explore request, sorted by distance ascending
-            var hasADuggedPathToIt = explorePls.Where(HasADuggedPathToIt).ToList();
+            var hasADuggedPathToIt = explorePls.Where(targetTile =>
+            {
+                return field.GetCardinalAdjacent(targetTile.X, targetTile.Y).Any(t => t.Dug);
+            }).ToList();
             var sortedExplore = hasADuggedPathToIt.OrderBy(tile => tile.DistanceTo(plr.X, plr.Y)).ToList();
             var topPriority = sortedExplore.FirstOrDefault();
             return topPriority;
@@ -127,12 +130,6 @@ namespace MinedOut
             }
 
             MoveTowardTarget(exploreTarget);
-        }
-
-        private bool HasADuggedPathToIt(DrawableTile targetTile)
-        {
-            var surrounding = field.GetCardinalAdjacent(targetTile.X, targetTile.Y);
-            return surrounding.Any(t => t.Dug);
         }
 
         public void Draw(DrawCommandCollection drawCmds)
