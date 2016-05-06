@@ -18,25 +18,28 @@ namespace MinedOut
             this.field = field;
         }
 
-        private List<DijkstraVertex> Dijkstra(Vector2i targetPos)
+        private List<DijkstraVertex> Dijkstra(int targetX, int targetY)
         {
-            DijkstraVertex target = new DijkstraVertex(targetPos.X, targetPos.Y);
+            //make target vertex
+            DijkstraVertex target = new DijkstraVertex(targetX, targetY);
 
+            //get all dugged tiles (target included) and call it the "graph"
             HashSet<DijkstraVertex> allDug = new HashSet<DijkstraVertex>(PositionsOfAllDuggedTiles().Select(t => new DijkstraVertex(t.X, t.Y)));
             allDug.UnionWith(new HashSet<DijkstraVertex> {target});
             List<DijkstraVertex> graphAsList = allDug.ToList();
+            List<DijkstraVertex> graph = new List<DijkstraVertex>(graphAsList);
 
-            IEnumerable<DijkstraVertex> graph = new List<DijkstraVertex>(graphAsList);
-
+            //find the source vertex (making the assuming it's dugged)
             DijkstraVertex source = graph.First(v => v.X == plr.X && v.Y == plr.Y);
 
+            //dijkstra implementation
             foreach (DijkstraVertex v in graph)
             {
                 v.Dist = 99999;
                 v.Previous = null;
             }
             source.Dist = 0;
-            var Q = new List<DijkstraVertex>(graph.ToList());
+            var Q = new List<DijkstraVertex>(graph);
             while (Q.Count != 0)
             {
                 DijkstraVertex u = Q.OrderBy(t => t.Dist).First();
@@ -53,6 +56,7 @@ namespace MinedOut
                 }
             }
 
+            //traverse from the target to the source
             var path = target.GetPathFromSource();
             return path;
         }
@@ -74,7 +78,7 @@ namespace MinedOut
             if (exploreHere != cachedPathDest)
             {
                 //need to regen path
-                cachedPath = Dijkstra(new Vector2i(exploreHere.X, exploreHere.Y));
+                cachedPath = Dijkstra(exploreHere.X, exploreHere.Y);
                 cachedPathDest = exploreHere;
             }
             //now that we've cached the path, pop the first step and return it
