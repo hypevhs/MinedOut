@@ -57,6 +57,12 @@ namespace MinedOut
             {
                 drawCmds.Add(new DrawCommand(expl.X, expl.Y, '#', Color.Yellow, Color.Transparent));
             }
+
+            if (cachedPath != null)
+            {
+                var str = string.Join(", ", cachedPath);
+                drawCmds.AddRange(DrawCommand.FromString(0, 0, str, Color.Yellow, Color.Black));
+            }
         }
 
         private void ResetControls()
