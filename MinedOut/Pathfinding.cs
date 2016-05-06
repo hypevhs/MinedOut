@@ -22,8 +22,10 @@ namespace MinedOut
         {
             DijkstraVertex target = new DijkstraVertex(targetPos.X, targetPos.Y);
 
-            IEnumerable<DijkstraVertex> allDug = Enumerable.Select<Vector2i, DijkstraVertex>(PositionsOfAllDuggedTiles(), t => new DijkstraVertex(t.X, t.Y));
-            var graphAsList = allDug.Concat(new List<DijkstraVertex> { target });
+            HashSet<DijkstraVertex> allDug = new HashSet<DijkstraVertex>(PositionsOfAllDuggedTiles().Select(t => new DijkstraVertex(t.X, t.Y)));
+            allDug.UnionWith(new HashSet<DijkstraVertex> {target});
+            List<DijkstraVertex> graphAsList = allDug.ToList();
+
             IEnumerable<DijkstraVertex> graph = new List<DijkstraVertex>(graphAsList);
 
             DijkstraVertex source = graph.First(v => v.X == plr.X && v.Y == plr.Y);
