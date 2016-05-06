@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -114,13 +115,24 @@ namespace MinedOut
             return topPriority;
         }
 
+        private DrawableTile cachedPathDest;
+        private List<DijkstraVertex> cachedPath;
+
         private Vector2i NextStepInMovingTowards(DrawableTile exploreHere)
         {
-            IEnumerable<DijkstraVertex> path = Dijkstra(new Vector2i(exploreHere.X, exploreHere.Y));
-            return path.First().ToVector2i();
+            if (exploreHere != cachedPathDest)
+            {
+                //need to regen path
+                cachedPath = Dijkstra(new Vector2i(exploreHere.X, exploreHere.Y));
+                cachedPathDest = exploreHere;
+            }
+            //now that we've cached the path, pop the first step and return it
+            var firstVertex = cachedPath.First();
+            cachedPath.Remove(firstVertex);
+            return firstVertex.ToVector2i();
         }
 
-        private IEnumerable<DijkstraVertex> Dijkstra(Vector2i targetPos)
+        private List<DijkstraVertex> Dijkstra(Vector2i targetPos)
         {
             DijkstraVertex target = new DijkstraVertex(targetPos.X, targetPos.Y);
 
