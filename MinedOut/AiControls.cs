@@ -78,9 +78,9 @@ namespace MinedOut
             var mcmWhereY = plr.Y;
             var mcmHere = field.GetAdjacentMineCount(mcmWhereX, mcmWhereY);
 
-            var flaggedUndug = GetAdjacentTilesCount(mcmWhereX, mcmWhereY, flagged: true, dug: false);
-            var unflaggedUndug = GetAdjacentTilesCount(mcmWhereX, mcmWhereY, flagged: false, dug: false);
-            var undug = GetAdjacentTilesCount(mcmWhereX, mcmWhereY, flagged: null, dug: false);
+            var flaggedUndug = GetAdjacentTiles(mcmWhereX, mcmWhereY, flagged: true, dug: false);
+            var unflaggedUndug = GetAdjacentTiles(mcmWhereX, mcmWhereY, flagged: false, dug: false);
+            var undug = GetAdjacentTiles(mcmWhereX, mcmWhereY, flagged: null, dug: false);
 
             //if the counter is the same as the FlaggedUndug, explore the UnflaggedUndug
             if (mcmHere == flaggedUndug.Count())
@@ -95,7 +95,7 @@ namespace MinedOut
             }
         }
 
-        private IEnumerable<DrawableTile> GetAdjacentTilesCount(int x, int y, bool? flagged, bool? dug)
+        private IEnumerable<DrawableTile> GetAdjacentTiles(int x, int y, bool? flagged, bool? dug)
         {
             var matches = field.GetAdjacent(x, y).Where(t =>
             {
