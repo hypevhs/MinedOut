@@ -10,6 +10,7 @@ namespace MinedOut
         private readonly AiPlayer plr;
         private readonly Minefield field;
         private readonly HashSet<DrawableTile> explorePls;
+        private readonly HashSet<DrawableTile> flagPls;
         public bool MoveUp { get; private set; }
         public bool MoveDn { get; private set; }
         public bool MoveLf { get; private set; }
@@ -24,6 +25,7 @@ namespace MinedOut
             this.plr = plr;
             this.field = field;
             explorePls = new HashSet<DrawableTile>();
+            flagPls = new HashSet<DrawableTile>();
             pathfinder = new Pathfinder(plr, field);
         }
 
@@ -75,14 +77,36 @@ namespace MinedOut
             var mcmWhereY = plr.Y;
             var mcmHere = field.GetAdjacentMineCount(mcmWhereX, mcmWhereY);
 
-            //if the counter is 0, explore all unexplored neighbors
-            if (mcmHere == 0)
+            //if the counter is the same as the flagged undug, explore the unflagged undug
+            if (mcmHere == GetAdjacentTilesCount(mcmWhereX, mcmWhereY, flagged: true, dug: false).Count())
             {
-                var adjUnexplored =
-                    field.GetAdjacent(mcmWhereX, mcmWhereY)
-                        .Where(t => t.Dug == false);
-                explorePls.UnionWith(adjUnexplored);
+                var exploreThese = GetAdjacentTilesCount(mcmWhereX, mcmWhereY, flagged: false, dug: false);
+                explorePls.UnionWith(exploreThese);
             }
+        }
+
+        private IEnumerable<DrawableTile> GetAdjacentTilesCount(int x, int y, bool? flagged, bool? dug)
+        {
+            var matches = field.GetAdjacent(x, y).Where(t =>
+            {
+                if (!flagged.HasValue)
+                    return true;
+                if (flagged.Value && t.Flagged)
+                    return true;
+                if (!flagged.Value && !t.Flagged)
+                    return true;
+                return false;
+            }).Where(t =>
+            {
+                if (!dug.HasValue)
+                    return true;
+                if (dug.Value && t.Dug)
+                    return true;
+                if (!dug.Value && !t.Dug)
+                    return true;
+                return false;
+            });
+            return matches;
         }
 
         private DrawableTile GetAnExploreTarget()
