@@ -155,7 +155,7 @@ namespace MinedOut
         private void UpdateControls()
         {
             //if we can flag anything, do so, then end the frame
-            if (FlagNearby())
+            if (TryFlagNearby())
                 return;
 
             var exploreTarget = GetAnExploreTarget();
@@ -167,7 +167,7 @@ namespace MinedOut
             MoveTowardTarget(exploreTarget);
         }
 
-        private bool FlagNearby()
+        private bool TryFlagNearby()
         {
             var flagMe = field.GetCardinalAdjacent(plr.X, plr.Y).Intersect(flagPls);
             var flagThis = flagMe.FirstOrDefault();
