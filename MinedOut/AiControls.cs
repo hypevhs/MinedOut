@@ -78,11 +78,20 @@ namespace MinedOut
             var mcmWhereY = plr.Y;
             var mcmHere = field.GetAdjacentMineCount(mcmWhereX, mcmWhereY);
 
-            //if the counter is the same as the flagged undug, explore the unflagged undug
-            if (mcmHere == GetAdjacentTilesCount(mcmWhereX, mcmWhereY, flagged: true, dug: false).Count())
+            var flaggedUndug = GetAdjacentTilesCount(mcmWhereX, mcmWhereY, flagged: true, dug: false);
+            var unflaggedUndug = GetAdjacentTilesCount(mcmWhereX, mcmWhereY, flagged: false, dug: false);
+            var undug = GetAdjacentTilesCount(mcmWhereX, mcmWhereY, flagged: null, dug: false);
+
+            //if the counter is the same as the FlaggedUndug, explore the UnflaggedUndug
+            if (mcmHere == flaggedUndug.Count())
             {
-                var exploreThese = GetAdjacentTilesCount(mcmWhereX, mcmWhereY, flagged: false, dug: false);
-                explorePls.UnionWith(exploreThese);
+                explorePls.UnionWith(unflaggedUndug);
+            }
+
+            //if the counter is the same as the Undug, flag the UnflaggedUndug
+            if (mcmHere == undug.Count())
+            {
+                flagPls.UnionWith(unflaggedUndug);
             }
         }
 
