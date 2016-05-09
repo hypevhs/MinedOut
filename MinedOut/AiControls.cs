@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SFML.Graphics;
@@ -138,8 +139,7 @@ namespace MinedOut
             }
             else
             {
-                //meaning: the distance is not 1 so it's a pathfinding error probably
-                FlagDn = true;
+                throw new Exception("the distance is not 1, so it's a pathfinding error probably");
             }
         }
         
@@ -148,9 +148,7 @@ namespace MinedOut
             var exploreTarget = GetAnExploreTarget();
             if (exploreTarget == null)
             {
-                //meaning: no more tiles to check.
-                FlagRt = true;
-                return;
+                throw new Exception("no more tiles to check");
             }
 
             MoveTowardTarget(exploreTarget);
