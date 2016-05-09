@@ -164,6 +164,11 @@ namespace MinedOut
                 drawCmds.Add(new DrawCommand(expl.X, expl.Y, '#', Color.Yellow, Color.Transparent));
             }
 
+            foreach (var flag in flagPls)
+            {
+                drawCmds.Add(new DrawCommand(flag.X, flag.Y, '#', Color.Red, Color.Transparent));
+            }
+
             pathfinder.Draw(drawCmds);
         }
     }
