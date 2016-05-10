@@ -91,15 +91,6 @@ namespace MinedOut
             cachedPath.Remove(firstVertex);
             return firstVertex.ToVector2i();
         }
-
-        public void Draw(DrawCommandCollection drawCmds)
-        {
-            if (cachedPath != null)
-            {
-                var str = string.Join(", ", cachedPath);
-                drawCmds.AddRange(DrawCommand.FromString(0, 0, str, Color.Yellow, Color.Black));
-            }
-        }
     }
 
     internal class DijkstraVertex : Tile

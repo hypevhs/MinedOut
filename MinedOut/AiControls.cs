@@ -231,8 +231,6 @@ namespace MinedOut
             {
                 drawCmds.Add(new DrawCommand(flag.X, flag.Y, '#', Color.Red, Color.Transparent));
             }
-
-            pathfinder.Draw(drawCmds);
         }
     }
 }
