@@ -178,12 +178,19 @@ namespace MinedOut
             }
             
             //and get the closest one
-            var sortedFlag = standHereToFlag.OrderBy(tile => tile.DistanceTo(plr.X, plr.Y)).ToList();
+            var sortedFlag = standHereToFlag.OrderBy(GetDistanceScore).ToList();
             var flagTarget = sortedFlag.FirstOrDefault();
             if (flagTarget == null)
                 return false;
             MoveTowardTarget(flagTarget);
             return true;
+        }
+
+        private int GetDistanceScore(DrawableTile tile)
+        {
+            return
+                tile.DistanceTo(Minefield.SizeX - 1, Minefield.SizeY - 1)*2 +
+                tile.DistanceTo(plr.X, plr.Y);
         }
 
         private bool TryExplore()
@@ -193,7 +200,7 @@ namespace MinedOut
             {
                 return field.GetCardinalAdjacent(t.X, t.Y).Any(t2 => t2.Dug);
             }).ToList();
-            var sortedExplore = hasADuggedPathToIt.OrderBy(tile => tile.DistanceTo(plr.X, plr.Y)).ToList();
+            var sortedExplore = hasADuggedPathToIt.OrderBy(GetDistanceScore).ToList();
             var exploreTarget = sortedExplore.FirstOrDefault();
             if (exploreTarget == null)
                 return false;
