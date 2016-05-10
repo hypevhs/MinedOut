@@ -67,12 +67,6 @@ namespace MinedOut
 
         private void UpdatePriorities()
         {
-            //if we're on an explore candidate, remove it from the todolist
-            explorePls.RemoveWhere(t =>
-                t.X == plr.X &&
-                t.Y == plr.Y
-            );
-
             //save current count to MCM
             var mcmWhereX = plr.X;
             var mcmWhereY = plr.Y;
@@ -133,6 +127,12 @@ namespace MinedOut
                 if (diffX == -1) MoveLf = true;
                 if (diffY == 1) MoveDn = true;
                 if (diffY == -1) MoveUp = true;
+                
+                //if we're going to an explore candidate, remove it from the todolist
+                explorePls.RemoveWhere(t =>
+                    t.X == plr.X+diffX &&
+                    t.Y == plr.Y+diffY
+                );
             }
             else
             {
