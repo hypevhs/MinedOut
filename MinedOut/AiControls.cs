@@ -101,7 +101,10 @@ namespace MinedOut
                 {
                     if (!t.Dug)
                         return false;
-                    return field.GetAdjacent(t.X, t.Y).Count(t2 => !t2.Dug) > 0;
+                    var itsSurroundingUndug = field.GetAdjacent(t.X, t.Y).Where(t2 => !t2.Dug).ToList();
+                    if (itsSurroundingUndug.All(t2 => t2.Flagged))
+                        return false;
+                    return itsSurroundingUndug.Any();
                 });
                 explorePls.UnionWith(alongTheUndug);
             }
