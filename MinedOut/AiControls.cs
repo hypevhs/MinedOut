@@ -83,13 +83,13 @@ namespace MinedOut
             var undug = GetAdjacentTiles(mcmWhereX, mcmWhereY, flagged: null, dug: false).ToList();
 
             //if the counter is the same as the FlaggedUndug, explore the UnflaggedUndug
-            if (mcmHere == flaggedUndug.Count())
+            if (mcmHere == flaggedUndug.Count)
             {
                 explorePls.UnionWith(unflaggedUndug);
             }
 
             //if the counter is the same as the Undug, flag the UnflaggedUndug
-            if (mcmHere == undug.Count())
+            if (mcmHere == undug.Count)
             {
                 flagPls.UnionWith(unflaggedUndug);
             }
