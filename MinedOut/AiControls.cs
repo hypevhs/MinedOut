@@ -93,22 +93,6 @@ namespace MinedOut
             {
                 flagPls.UnionWith(unflaggedUndug);
             }
-
-            //if theres STILL nothing to do, start searching along the undug
-            if (explorePls.Count == 0 && flagPls.Count == 0)
-            {
-                var alongTheUndug = field.GetAllTiles().Where(t =>
-                {
-                    if (!t.Dug)
-                        return false;
-                    var itsSurroundingUndug = field.GetAdjacent(t.X, t.Y).Where(t2 => !t2.Dug).ToList();
-                    if (itsSurroundingUndug.All(t2 => t2.Flagged))
-                        return false;
-                    return itsSurroundingUndug.Any();
-                });
-                explorePls.UnionWith(alongTheUndug);
-            }
-
         }
 
         private IEnumerable<DrawableTile> GetAdjacentTiles(int x, int y, bool? flagged, bool? dug)
@@ -165,7 +149,18 @@ namespace MinedOut
                 return;
             if (TryExplore())
                 return;
-            throw new Exception("no more tiles to check");
+
+            //if theres STILL nothing to do, start searching along the undug
+            var alongTheUndug = field.GetAllTiles().Where(t =>
+            {
+                if (!t.Dug)
+                    return false;
+                var itsSurroundingUndug = field.GetAdjacent(t.X, t.Y).Where(t2 => !t2.Dug).ToList();
+                if (itsSurroundingUndug.All(t2 => t2.Flagged))
+                    return false;
+                return itsSurroundingUndug.Any();
+            });
+            explorePls.UnionWith(alongTheUndug);
         }
 
         private bool TryMoveTowardFlag()
