@@ -119,18 +119,6 @@ namespace MinedOut
             return matches;
         }
 
-        private DrawableTile GetAnExploreTarget()
-        {
-            //get explore request, sorted by distance ascending
-            var hasADuggedPathToIt = explorePls.Where(targetTile =>
-            {
-                return field.GetCardinalAdjacent(targetTile.X, targetTile.Y).Any(t => t.Dug);
-            }).ToList();
-            var sortedExplore = hasADuggedPathToIt.OrderBy(tile => tile.DistanceTo(plr.X, plr.Y)).ToList();
-            var topPriority = sortedExplore.FirstOrDefault();
-            return topPriority;
-        }
-
         private void MoveTowardTarget(DrawableTile exploreTarget)
         {
             var nextStep = pathfinder.NextStepInMovingTowards(exploreTarget);
@@ -154,17 +142,47 @@ namespace MinedOut
         
         private void UpdateControls()
         {
-            //if we can flag anything, do so, then end the frame
+            //if possible, do <action> then end the frame
             if (TryFlagNearby())
                 return;
+            if (TryMoveTowardFlag())
+                return;
+            if (TryExplore())
+                return;
+            throw new Exception("no more tiles to check");
+        }
 
-            var exploreTarget = GetAnExploreTarget();
-            if (exploreTarget == null)
+        private bool TryMoveTowardFlag()
+        {
+            //for all places needed to be flagged, target adjacent dug tiles
+            var standHereToFlag = new List<DrawableTile>();
+            foreach (var flagReq in flagPls)
             {
-                throw new Exception("no more tiles to check");
+                standHereToFlag.AddRange(field.GetCardinalAdjacent(flagReq.X, flagReq.Y).Where(t => t.Dug));
             }
+            
+            //and get the closest one
+            var sortedFlag = standHereToFlag.OrderBy(tile => tile.DistanceTo(plr.X, plr.Y)).ToList();
+            var flagTarget = sortedFlag.FirstOrDefault();
+            if (flagTarget == null)
+                return false;
+            MoveTowardTarget(flagTarget);
+            return true;
+        }
 
+        private bool TryExplore()
+        {
+            //get explore request, sorted by distance ascending
+            var hasADuggedPathToIt = explorePls.Where(t =>
+            {
+                return field.GetCardinalAdjacent(t.X, t.Y).Any(t2 => t2.Dug);
+            }).ToList();
+            var sortedExplore = hasADuggedPathToIt.OrderBy(tile => tile.DistanceTo(plr.X, plr.Y)).ToList();
+            var exploreTarget = sortedExplore.FirstOrDefault();
+            if (exploreTarget == null)
+                return false;
             MoveTowardTarget(exploreTarget);
+            return true;
         }
 
         private bool TryFlagNearby()
