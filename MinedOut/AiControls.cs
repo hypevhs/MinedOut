@@ -127,12 +127,21 @@ namespace MinedOut
                 if (diffX == -1) MoveLf = true;
                 if (diffY == 1) MoveDn = true;
                 if (diffY == -1) MoveUp = true;
-                
+
+                var goingX = plr.X + diffX;
+                var goingY = plr.Y + diffY;
+
                 //if we're going to an explore candidate, remove it from the todolist
-                explorePls.RemoveWhere(t =>
-                    t.X == plr.X+diffX &&
-                    t.Y == plr.Y+diffY
-                );
+                var didExplore = explorePls.RemoveWhere(t =>
+                    t.X == goingX &&
+                    t.Y == goingY
+                ) > 0;
+                if (didExplore && !field.GetTile(goingX, goingY).Dug)
+                {
+                    //if we're going to dig, mark all surroundings
+                    var goingSurroundDug = field.GetAdjacent(goingX, goingY).Where(t => t.Dug);
+                    explorePls.UnionWith(goingSurroundDug);
+                }
             }
             else
             {
