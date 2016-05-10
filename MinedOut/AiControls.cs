@@ -138,7 +138,7 @@ namespace MinedOut
 
             //can reach our target in one step? remove it from todolist, then move to it
             var tileTmp = new GroundTile(nextStep.X, nextStep.Y);
-            if (tileTmp.DistanceTo(plr.X, plr.Y) == 1)
+            if (tileTmp.DistanceTo(plr.X, plr.Y) <= 1)
             {
                 var diffX = nextStep.X - plr.X;
                 var diffY = nextStep.Y - plr.Y;

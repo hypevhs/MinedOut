@@ -75,6 +75,11 @@ namespace MinedOut
 
         public Vector2i NextStepInMovingTowards(DrawableTile exploreHere)
         {
+            //you're sitting on top of it
+            if (exploreHere.X == plr.X && exploreHere.Y == plr.Y)
+            {
+                return new Vector2i(exploreHere.X, exploreHere.Y);
+            }
             if (exploreHere != cachedPathDest)
             {
                 //need to regen path
