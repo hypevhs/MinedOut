@@ -93,6 +93,19 @@ namespace MinedOut
             {
                 flagPls.UnionWith(unflaggedUndug);
             }
+
+            //if theres STILL nothing to do, start searching along the undug
+            if (explorePls.Count == 0 && flagPls.Count == 0)
+            {
+                var alongTheUndug = field.GetAllTiles().Where(t =>
+                {
+                    if (!t.Dug)
+                        return false;
+                    return field.GetAdjacent(t.X, t.Y).Count(t2 => !t2.Dug) > 0;
+                });
+                explorePls.UnionWith(alongTheUndug);
+            }
+
         }
 
         private IEnumerable<DrawableTile> GetAdjacentTiles(int x, int y, bool? flagged, bool? dug)
