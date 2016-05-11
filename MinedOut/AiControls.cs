@@ -225,6 +225,10 @@ namespace MinedOut
             if (diffY == 1) FlagDn = true;
             if (diffY == -1) FlagUp = true;
             flagPls.Remove(flagThis);
+
+            //if we're going to flag, mark all its surroundings
+            explorePls.UnionWith(field.GetAdjacent(flagThis.X, flagThis.Y).Where(t => t.Dug));
+
             return true;
         }
 
